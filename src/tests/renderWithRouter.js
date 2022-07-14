@@ -1,15 +1,13 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { render } from '@testing-library/react';
+import { Router } from 'react-router-dom';
 
-const renderWithRouter = (component, { historyPath = '/' } = {}) => {
+const renderWithRouter = (component) => {
   const history = createMemoryHistory();
-  history.push(historyPath)
-  return {
-    ...render(<Router history={ history } ><Provider store={store}>{component}</Provider></Router>),
-    history,
-  }
-}
+  return ({
+    ...render(<Router history={ history }>{component}</Router>), history,
+  });
+};
 
 export default renderWithRouter;
