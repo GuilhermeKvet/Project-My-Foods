@@ -1,18 +1,17 @@
 import React from 'react';
-import './App.css';
 import { Switch, Route } from 'react-router-dom';
+import './App.css';
 import Foods from './pages/Foods';
 import Login from './pages/Login';
-import { BrowserRouter } from 'react-router-dom';
+import Profile from './pages/Profile';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/foods" component={ Foods } />
-        <Route path="/" component={ Login } />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/profile" component={ Profile } />
+      <Route path="/foods" component={ Foods } />
+      <Route path="/" component={ Login } />
+    </Switch>
   );
 }
 
