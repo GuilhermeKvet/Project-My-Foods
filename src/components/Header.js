@@ -9,7 +9,7 @@ function Header({ title }) {
   const history = useHistory();
   const [searchBarState, setSearchBarState] = useState(false);
   return (
-    <header>
+    <header style={ { display: 'flex', flexDirection: 'column' } }>
       <nav style={ { display: 'flex' } }>
         <button type="button" onClick={ () => history.push('/profile') }>
           <img src={ profileIcon } alt="profile" data-testid="profile-top-btn" />
