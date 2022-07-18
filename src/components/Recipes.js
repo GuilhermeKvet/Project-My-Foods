@@ -1,33 +1,57 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import context from '../context/context';
 
 function Recipes() {
-  const { foods, drinks } = useContext(context);
+  const { foods, drinks, categoryName } = useContext(context);
   const history = useHistory();
+  // console.log(foods);
   if (history.location.pathname.includes('/foods')) {
+    if (categoryName === 'Goat') {
+      return (
+        <button
+          type="button"
+          key={ foods[0].idMeal }
+          onClick={ () => history.push(`/foods/${foods[0].idMeal}`) }
+        >
+          <div
+            data-testid="0-recipe-card"
+          >
+            <h1 data-testid="0-card-name">{foods[0].strMeal}</h1>
+            <img
+              src={ foods[0].strMealThumb }
+              alt={ foods[0].strMeal }
+              data-testid="0-card-img"
+              style={ { height: '200px' } }
+            />
+          </div>
+        </button>
+      );
+    }
     return (
       foods.length > 0 && (
         foods.map((recipe, index) => {
           const { strMealThumb, idMeal, strMeal } = recipe;
-          return foods.length === 1 ? history.push(`/foods/${idMeal}`) : (
-            <button
-              type="button"
-              key={ idMeal }
-              onClick={ () => history.push(`/foods/${idMeal}`) }
-            >
-              <div
-                data-testid={ `${index}-recipe-card` }
+          return (
+            <div key={ idMeal }>
+              {foods.length === 1 && <Redirect to={ `/foods/${idMeal}` } />}
+              <button
+                type="button"
+                onClick={ () => history.push(`/foods/${idMeal}`) }
               >
-                <h1 data-testid={ `${index}-card-name` }>{strMeal}</h1>
-                <img
-                  src={ strMealThumb }
-                  alt={ strMeal }
-                  data-testid={ `${index}-card-img` }
-                  style={ { height: '200px' } }
-                />
-              </div>
-            </button>
+                <div
+                  data-testid={ `${index}-recipe-card` }
+                >
+                  <h1 data-testid={ `${index}-card-name` }>{strMeal}</h1>
+                  <img
+                    src={ strMealThumb }
+                    alt={ strMeal }
+                    data-testid={ `${index}-card-img` }
+                    style={ { height: '200px' } }
+                  />
+                </div>
+              </button>
+            </div>
           );
         })
       )

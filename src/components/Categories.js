@@ -9,7 +9,7 @@ const TWELVE = 12;
 function Categories({ url, category }) {
   const [filters, setFilters] = useState([]);
   const history = useHistory();
-  const { setDrinks, setFoods } = useContext(context);
+  const { setDrinks, setFoods, setCategoryName } = useContext(context);
   const [lastUrlFood, setLastUrlFood] = useState('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   const [lastUrlDrink, setLastUrlDrinks] = useState('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
 
@@ -53,6 +53,7 @@ function Categories({ url, category }) {
   };
 
   const filterCategory = (strCategory) => {
+    setCategoryName(strCategory);
     const { pathname } = history.location;
     const fetchDrinks = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${strCategory}`;
     const fetchMeals = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${strCategory}`;
