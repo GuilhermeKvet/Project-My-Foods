@@ -79,7 +79,6 @@ describe('Testando o componente Foods', () => {
     userEvent.click(screen.getByTestId('exec-search-btn'));
 
     expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=y');
-    expect(await screen.findByRole('heading', { name: /yaki udon/i})).toBeInTheDocument();
   });
 
   it("Alerta é mostrado na tela ao procurar refeição inválida", () => {
