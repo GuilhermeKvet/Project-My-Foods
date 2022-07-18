@@ -74,7 +74,7 @@ function Provider({ children }) {
   }, [filters, history]);
 
   return (
-    <context.Provider value={ { foods, setFilters, drinks } }>
+    <context.Provider value={ { foods, setFilters, drinks, setDrinks, setFoods } }>
       {children}
     </context.Provider>
   );
