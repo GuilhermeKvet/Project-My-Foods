@@ -31,52 +31,43 @@ function Provider({ children }) {
 
   useEffect(() => {
     const fetchApiDrink = async () => {
-      const response = await fetch(urlDrink);
-      const data = await response.json();
-      if (data.drinks === null) {
+      try {
+        const response = await fetch(urlDrink);
+        const data = await response.json();
+        if (data.drinks === null) {
+          global.alert(error);
+          return null;
+        }
+        const drinkList = data.drinks.slice(0, TWELVE);
+        setDrinks(drinkList);
+      } catch {
         global.alert(error);
-        return null;
       }
-      const drinkList = data.drinks.slice(0, TWELVE);
-      setDrinks(drinkList);
     };
     fetchApiDrink();
   }, [urlDrink]);
 
   useEffect(() => {
+    const { pathname } = history.location;
     const fetchAPIFilters = () => {
-      if (history.location.pathname === '/drinks') {
-        switch (filters.filter) {
-        case 'Ingredient':
-          setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${filters.search}`);
-          break;
-        case 'Name':
-          setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${filters.search}`);
-          break;
-        case 'First Letter':
-          setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${filters.search}`);
-          break;
-        default:
-          return null;
-        }
-      } else {
-        switch (filters.filter) {
-        case 'Ingredient':
-          if (filters.search === 'chicken') {
-            setUrl('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
-            break;
-          }
-          setUrl(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${filters.search}`);
-          break;
-        case 'Name':
-          setUrl(`https://www.themealdb.com/api/json/v1/1/search.php?s=${filters.search}`);
-          break;
-        case 'First Letter':
-          setUrl(`https://www.themealdb.com/api/json/v1/1/search.php?f=${filters.search}`);
-          break;
-        default:
-          return null;
-        }
+      if (pathname === '/foods' && filters.search === 'chicken') {
+        return setUrl('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
+      }
+      switch (filters.filter) {
+      case 'Ingredient':
+        return pathname === '/drinks'
+          ? setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${filters.search}`)
+          : setUrl(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${filters.search}`);
+      case 'Name':
+        return pathname === '/drinks'
+          ? setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${filters.search}`)
+          : setUrl(`https://www.themealdb.com/api/json/v1/1/search.php?s=${filters.search}`);
+      case 'First Letter':
+        return pathname === '/drinks'
+          ? setUrlDrink(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${filters.search}`)
+          : setUrl(`https://www.themealdb.com/api/json/v1/1/search.php?f=${filters.search}`);
+      default:
+        return null;
       }
     };
     fetchAPIFilters();
