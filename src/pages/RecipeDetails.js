@@ -24,7 +24,23 @@ function RecipesDetails() {
 
   if (pathname.includes('/drinks')) {
     const { strDrinkThumb, strDrink, strCategory, strInstructions } = recipe;
-    console.log(recipe);
+    const listRecipe = Object.entries(recipe);
+    const listAllIngredients = listRecipe
+      .filter((arr) => arr[0].includes('strIngredient'));
+    const listIngredients = listAllIngredients.filter((arr) => arr[1]);
+    const ingredients = listIngredients.reduce((acc, arr) => {
+      acc = [...acc, arr[1]];
+      return acc;
+    }, []);
+
+    const listAllMeasure = listRecipe
+      .filter((arr) => arr[0].includes('strMeasure'));
+    const listMeasure = listAllMeasure.filter((arr) => arr[1]);
+    const measures = listMeasure.reduce((acc, arr) => {
+      acc = [...acc, arr[1]];
+      return acc;
+    }, []);
+
     return (
       <div>
         <img
@@ -34,15 +50,22 @@ function RecipesDetails() {
           width="200px"
         />
         <h2 data-testid="recipe-title">{strDrink}</h2>
-        <p data-testid="recipe-category">{strCategory}</p>
-
-        <p data-testid="instructions">{strInstructions}</p>
+        <h3 data-testid="recipe-category">{strCategory}</h3>
+        {ingredients.map((ingredient, index) => (
+          <p
+            data-testid={ `${index}-ingredient-name-and-measure` }
+            key={ ingredient }
+          >
+            {`${ingredient}  ${measures[index] === undefined
+              ? '' : `- ${measures[index]}`}`}
+          </p>
+        ))}
+        <h3 data-testid="instructions">{strInstructions}</h3>
       </div>
     );
   }
-
   return (
-    <h3>teste</h3>
+    <h3>Detalhes refeições</h3>
   );
 }
 
