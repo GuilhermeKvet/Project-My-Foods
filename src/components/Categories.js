@@ -6,12 +6,15 @@ import context from '../context/context';
 const FIVE = 5;
 const TWELVE = 12;
 
+const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+
 function Categories({ url, category }) {
   const [filters, setFilters] = useState([]);
   const history = useHistory();
   const { setDrinks, setFoods, setCategoryName } = useContext(context);
-  const [lastUrlFood, setLastUrlFood] = useState('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-  const [lastUrlDrink, setLastUrlDrinks] = useState('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+  const [lastUrlFood, setLastUrlFood] = useState(urlFoods);
+  const [lastUrlDrink, setLastUrlDrinks] = useState(urlDrinks);
 
   useEffect(() => {
     const fetchApiCategorys = async () => {
@@ -37,38 +40,24 @@ function Categories({ url, category }) {
     }
   };
 
-  const fetchDefault = async () => {
-    const { pathname } = history.location;
-    if (pathname === '/foods') {
-      const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      const data = await response.json();
-      const newData = data.meals.slice(0, TWELVE);
-      setFoods(newData);
-    } else {
-      const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-      const data = await response.json();
-      const newData = data.drinks.slice(0, TWELVE);
-      setDrinks(newData);
-    }
-  };
-
   const filterCategory = (strCategory) => {
     setCategoryName(strCategory);
     const { pathname } = history.location;
     const fetchDrinks = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${strCategory}`;
     const fetchMeals = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${strCategory}`;
+
     if (pathname === '/drinks' && fetchDrinks !== lastUrlDrink) {
       fetchCategories(fetchDrinks, 'drinks');
       setLastUrlDrinks(fetchDrinks);
     } else if (fetchDrinks === lastUrlDrink) {
-      fetchDefault();
-      setLastUrlDrinks(fetchDrinks);
+      fetchCategories(urlDrinks, 'drinks');
+      setLastUrlDrinks(urlDrinks);
     } else if (fetchMeals !== lastUrlFood) {
       fetchCategories(fetchMeals, 'foods');
       setLastUrlFood(fetchMeals);
-    } else {
-      fetchDefault();
-      setLastUrlFood(fetchMeals);
+    } else if (fetchMeals === lastUrlFood) {
+      fetchCategories(urlFoods, 'foods');
+      setLastUrlFood(urlFoods);
     }
   };
 

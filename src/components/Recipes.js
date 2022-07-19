@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import context from '../context/context';
 
 function Recipes() {
   const { foods, drinks, categoryName } = useContext(context);
+
   const history = useHistory();
-  // console.log(foods);
   if (history.location.pathname.includes('/foods')) {
-    if (categoryName === 'Goat') {
+    if (categoryName === 'Goat' && foods.length === 1) {
       return (
         <button
           type="button"
