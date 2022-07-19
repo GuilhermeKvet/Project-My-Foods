@@ -13,6 +13,7 @@ function Provider({ children }) {
   const [filters, setFilters] = useState({ filter: '', search: '' });
   const [url, setUrl] = useState('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   const [urlDrink, setUrlDrink] = useState('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+  const [categoryName, setCategoryName] = useState('');
   const history = useHistory();
 
   useEffect(() => {
@@ -74,7 +75,15 @@ function Provider({ children }) {
   }, [filters, history]);
 
   return (
-    <context.Provider value={ { foods, setFilters, drinks, setDrinks, setFoods } }>
+    <context.Provider
+      value={ { foods,
+        setFilters,
+        drinks,
+        setDrinks,
+        setFoods,
+        setCategoryName,
+        categoryName } }
+    >
       {children}
     </context.Provider>
   );

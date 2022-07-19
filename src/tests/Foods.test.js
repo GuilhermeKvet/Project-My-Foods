@@ -1,5 +1,6 @@
 import React from 'react';
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
@@ -36,7 +37,7 @@ describe('Testando o componente Foods', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it("Verifica se a página renderiza uma lista com as principais receitas", async () => {
+  it.only("Verifica se a página renderiza uma lista com as principais receitas", async () => {
     expect(global.fetch).toHaveBeenCalled();
     expect(await screen.findByRole('heading', { name: /corba/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Kumpir/i })).toBeInTheDocument();
@@ -44,7 +45,7 @@ describe('Testando o componente Foods', () => {
     expect(screen.getByRole('heading', { name: /Pancakes/i })).toBeInTheDocument();
   });
 
-  it("Filtra a lista por ingredientes *chicken de forma correta", async () => {
+  it.only("Filtra a lista por ingredientes *chicken de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/ingredients/i));
     userEvent.type(screen.getByRole('textbox'), 'chicken');
@@ -75,23 +76,16 @@ describe('Testando o componente Foods', () => {
   it("Filtra a lista pela primeira letra de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/First Letter/i));
-    userEvent.type(screen.getByRole('textbox'), 'y');
+    userEvent.type(screen.getByRole('textbox'), 'a');
     userEvent.click(screen.getByTestId('exec-search-btn'));
 
     expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=y');
   });
 
-  it("Alerta é mostrado na tela ao procurar refeição inválida", () => {
-    userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
-    userEvent.click(screen.getByText(/First Letter/i));
-    userEvent.type(screen.getByRole('textbox'), 'z');
-    userEvent.click(screen.getByTestId('exec-search-btn'));
-  });
-
-  it("Alerta é mostrado na tela ao procurar refeição inválida", async () => {
-    userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
-    userEvent.click(screen.getByText(/First Letter/i));
-    userEvent.type(screen.getByRole('textbox'), 'zz');
-    userEvent.click(screen.getByTestId('exec-search-btn'));
-  });
+  // it("Alerta é mostrado na tela ao procurar refeição inválida", async () => {
+  //   userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
+  //   userEvent.click(screen.getByText(/First Letter/i));
+  //   userEvent.type(screen.getByRole('textbox'), 'zz');
+  //   userEvent.click(screen.getByTestId('exec-search-btn'));
+  // });
 });
