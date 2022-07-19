@@ -13,11 +13,12 @@ import drinks from '../../cypress/mocks/drinks';
 // import soupMeals from '../../cypress/mocks/soupMeals';
 // import firstLetterMeals from './mocks/firstLetterMeals';
 // import emptyMeals from '../../cypress/mocks/emptyMeals';
-import mealCategories from '../../cypress/mocks/mealCategories';
+// import mealCategories from '../../cypress/mocks/mealCategories';
+import drinkCategories from '../../cypress/mocks/drinkCategories';
 
-const corbaInstrucoes = /pick through your lentils for any foreign debris, rinse them 2 or 3 times/i;
+const drinkInstrucoes = /Pour the Galliano liqueur over ice. Fill the remainder of the glass with ginger ale and thats all there is to it/i;
 
-describe('Filtros Foods', () => {
+describe('Testa pagina de detalhes para Drinks', () => {
     beforeEach(async () => {
         global.fetch = jest.fn((url) =>
         Promise.resolve({
@@ -33,28 +34,24 @@ describe('Filtros Foods', () => {
           });
       })
 
-  it('Os botões estão filtrando corretamente',() => {
-    const corbaElement = screen.getByTestId('0-recipe-card');
+  it('Renderiza elementos corretamente dentro da pagina de detalhes',() => {
+    const ggElement = screen.getByTestId('0-recipe-card');
     expect(corbaElement).toBeInTheDocument();
-    userEvent.click(corbaElement);
+    userEvent.click(ggElement);
 
-    expect(screen.getByText(/corba/i)).toBeInTheDocument();
-    expect(screen.getByText(/soup/i)).toBeInTheDocument();
+    expect(screen.getByText(/gg/i)).toBeInTheDocument();
+    expect(screen.getByText(/ordinary Drink/i)).toBeInTheDocument();
 
     expect(screen.getByText(/ingredients/i)).toBeInTheDocument();
 
-    expect(screen.getByText(/Lentils/i)).toBeInTheDocument();
-    expect(screen.getByText(/Onion/i)).toBeInTheDocument();
-    expect(screen.getByText(/Tomato-Puree/i)).toBeInTheDocument();
-    expect(screen.getByText(/Carrots/i)).toBeInTheDocument();
-    expect(screen.getByText(/Vegetable-Stock /i)).toBeInTheDocument();
-    expect(screen.getByText(/Mint/i)).toBeInTheDocument();
+    expect(screen.getByText(/Galliano/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ginger ale/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ice/i)).toBeInTheDocument();
 
-    expect(screen.getAllByText(corbaInstrucoes)).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: 'https://www.themealdb.com/images/media/meals/58oia61564916529.jpg' })).toBeInTheDocument();
+    expect(screen.getAllByText(drinkInstrucoes)).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'https://www.thecocktaildb.com/images/media/drink/vyxwut1468875960.jpg' })).toBeInTheDocument();
     expect(screen.getByText(/recomended/i)).toBeInTheDocument();
     expect(screen.getByText(/start recipe/i)).toBeInTheDocument();
-    // 'https://www.youtube.com/watch?v=VVnZd8A84z4' video da comida
   })
   
 });

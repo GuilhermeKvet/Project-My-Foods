@@ -17,7 +17,7 @@ import mealCategories from '../../cypress/mocks/mealCategories';
 
 const corbaInstrucoes = /pick through your lentils for any foreign debris, rinse them 2 or 3 times/i;
 
-describe('Filtros Foods', () => {
+describe('Testa pagina de detalhes para Meals', () => {
     beforeEach(async () => {
         global.fetch = jest.fn((url) =>
         Promise.resolve({
@@ -33,7 +33,7 @@ describe('Filtros Foods', () => {
           });
       })
 
-  it('Os botões estão filtrando corretamente',() => {
+  it('Renderiza elementos corretamente dentro da pagina de detalhes',() => {
     const corbaElement = screen.getByTestId('0-recipe-card');
     expect(corbaElement).toBeInTheDocument();
     userEvent.click(corbaElement);
