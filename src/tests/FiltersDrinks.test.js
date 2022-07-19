@@ -4,7 +4,8 @@ import renderWithRouter from './renderWithRouter';
 // import milkDrinks  from '../cypress/mocks/milkDrinks';
 // import otherDrinks from '../cypress/mocks/otherDrinks';
 
-import App from '/drinks';
+import App from '../App';
+import { act } from 'react-dom/test-utils';
 
 
 describe('test drinks', () => {

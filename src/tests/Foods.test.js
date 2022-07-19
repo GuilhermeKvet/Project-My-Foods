@@ -54,7 +54,7 @@ describe('Testando o componente Foods', () => {
     expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
   });
 
-  it("Filtra a lista por ingredientes de forma correta", async () => {
+  it.only("Filtra a lista por ingredientes de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/ingredients/i));
     userEvent.click(screen.getByTestId('exec-search-btn'));
@@ -63,7 +63,7 @@ describe('Testando o componente Foods', () => {
     expect(await screen.findByRole('heading', { name: /Brown Stew Chicken/i })).toBeInTheDocument();
   });
 
-  it("Filtra a lista por nomes de forma correta", async () => {
+  it.only("Filtra a lista por nomes de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/Name/i));
     userEvent.type(screen.getByRole('textbox'), 'soup');
@@ -82,10 +82,10 @@ describe('Testando o componente Foods', () => {
     expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=y');
   });
 
-  // it("Alerta é mostrado na tela ao procurar refeição inválida", async () => {
-  //   userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
-  //   userEvent.click(screen.getByText(/First Letter/i));
-  //   userEvent.type(screen.getByRole('textbox'), 'zz');
-  //   userEvent.click(screen.getByTestId('exec-search-btn'));
-  // });
+  it.only("Alerta é mostrado na tela ao procurar refeição inválida", async () => {
+    userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
+    userEvent.click(screen.getByText(/First Letter/i));
+    userEvent.type(screen.getByRole('textbox'), 'zz');
+    userEvent.click(screen.getByTestId('exec-search-btn'));
+  });
 });
