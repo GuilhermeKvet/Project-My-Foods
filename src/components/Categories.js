@@ -66,7 +66,12 @@ function Categories({ url, category }) {
       <button
         type="button"
         data-testid="All-category-filter"
-        onClick={ () => fetchDefault() }
+        onClick={ () => {
+          const { pathname } = history.location;
+          return pathname.includes('drinks')
+            ? fetchCategories(urlDrinks, 'drinks')
+            : fetchCategories(urlFoods, 'foods');
+        } }
       >
         All
       </button>

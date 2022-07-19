@@ -34,7 +34,8 @@ function Recipes() {
           const { strMealThumb, idMeal, strMeal } = recipe;
           return (
             <div key={ idMeal }>
-              {foods.length === 1 && <Redirect to={ `/foods/${idMeal}` } />}
+              {(foods.length === 1 && foods[0].idMeal !== '52968')
+               && <Redirect to={ `/foods/${idMeal}` } />}
               <button
                 type="button"
                 onClick={ () => history.push(`/foods/${idMeal}`) }
