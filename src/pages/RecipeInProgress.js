@@ -16,15 +16,16 @@ function RecipeInProgress() {
       const newObj = {
         ...obj,
         [page]: {
+          ...progress[page],
           [id]: [...progress[page][id], ing],
         },
       };
       localStorage.setItem('inProgressRecipes', JSON.stringify(newObj));
     } else {
-      console.log('entrou');
       const newObj = {
         ...progress,
         [page]: {
+          ...progress[page],
           [id]: [ing],
         },
       };
