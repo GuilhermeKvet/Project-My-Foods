@@ -1,13 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import InteractionButtons from '../components/InteractionButtons';
-import Recommendation from '../components/Recommendation';
+import context from '../context/context';
 
-function RecipesDetails() {
+function RecipeInProgress() {
+  const [recipe, setRecipe] = useState({});
+  const { obj } = useContext(context);
   const history = useHistory();
   const { pathname } = history.location;
-  const [recipe, setRecipe] = useState({});
   const id = pathname.split('/')[2];
+
+  const saveProgress = (ing, page) => {
+    const progress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (progress[page][id]) {
+      const newObj = {
+        ...obj,
+        [page]: {
+          [id]: [...progress[page][id], ing],
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(newObj));
+    } else {
+      console.log('entrou');
+      const newObj = {
+        ...progress,
+        [page]: {
+          [id]: [ing],
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(newObj));
+    }
+  };
 
   useEffect(() => {
     const fetchApiById = async () => {
@@ -25,21 +48,13 @@ function RecipesDetails() {
   }, [id, pathname, setRecipe]);
 
   if (pathname.includes('/drinks')) {
-    const { strDrinkThumb, strDrink,
-      strInstructions, strAlcoholic } = recipe;
+    const { strDrinkThumb, strDrink, strAlcoholic, strInstructions } = recipe;
+
     const listRecipe = Object.entries(recipe);
     const listAllIngredients = listRecipe
       .filter((arr) => arr[0].includes('strIngredient'));
     const listIngredients = listAllIngredients.filter((arr) => arr[1]);
     const ingredients = listIngredients.reduce((acc, arr) => {
-      acc = [...acc, arr[1]];
-      return acc;
-    }, []);
-
-    const listAllMeasure = listRecipe
-      .filter((arr) => arr[0].includes('strMeasure'));
-    const listMeasure = listAllMeasure.filter((arr) => arr[1]);
-    const measures = listMeasure.reduce((acc, arr) => {
       acc = [...acc, arr[1]];
       return acc;
     }, []);
@@ -55,33 +70,36 @@ function RecipesDetails() {
         <h2 data-testid="recipe-title">{strDrink}</h2>
         <InteractionButtons recipe={ recipe } />
         <p data-testid="recipe-category">{strAlcoholic}</p>
-        {ingredients.map((ingredient, index) => (
-          <p
-            data-testid={ `${index}-ingredient-name-and-measure` }
-            key={ ingredient }
-          >
-            {`${ingredient}  ${measures[index] === undefined
-              ? '' : `- ${measures[index]}`}`}
-          </p>
-        ))}
+        <div style={ { display: 'flex', flexDirection: 'column' } }>
+          {ingredients.map((ingredient, index) => (
+            <label
+              key={ ingredient }
+              htmlFor={ ingredient }
+              data-testid={ `${index}-ingredient-step` }
+              onChange={ () => saveProgress(ingredient, 'cocktails') }
+            >
+              <input
+                type="checkbox"
+                name={ ingredient }
+                id={ ingredient }
+              />
+              {ingredient}
+            </label>
+          ))}
+        </div>
         <p data-testid="instructions">{strInstructions}</p>
-        <Recommendation />
         <footer
           style={ { position: 'fixed', width: '100%', bottom: 0 } }
         >
-          <button
-            data-testid="start-recipe-btn"
-            type="button"
-            onClick={ () => history.push(`/drinks/${id}/in-progress`) }
-          >
-            Start Recipe
+          <button type="button" data-testid="finish-recipe-btn">
+            Finish Recipe
           </button>
         </footer>
       </div>
     );
   }
 
-  const { strMealThumb, strMeal, strCategory, strInstructions, strYoutube } = recipe;
+  const { strMealThumb, strMeal, strCategory, strInstructions } = recipe;
   const listRecipe = Object.entries(recipe);
   const listAllIngredients = listRecipe
     .filter((arr) => arr[0].includes('strIngredient'));
@@ -90,16 +108,6 @@ function RecipesDetails() {
     acc = [...acc, arr[1]];
     return acc;
   }, []);
-
-  const listAllMeasure = listRecipe
-    .filter((arr) => arr[0].includes('strMeasure'));
-  const listMeasure = listAllMeasure.filter((arr) => arr[1]);
-  const measures = listMeasure.reduce((acc, arr) => {
-    acc = [...acc, arr[1]];
-    return acc;
-  }, []);
-
-  const linkYoutube = strYoutube?.replace('watch?v=', 'embed/');
 
   return (
     <div>
@@ -112,41 +120,29 @@ function RecipesDetails() {
       <h2 data-testid="recipe-title">{strMeal}</h2>
       <InteractionButtons recipe={ recipe } />
       <h3 data-testid="recipe-category">{strCategory}</h3>
-      {ingredients.map((ingredient, index) => (
-        <p
-          data-testid={ `${index}-ingredient-name-and-measure` }
-          key={ ingredient }
-        >
-          {`${ingredient}  ${measures[index] === undefined
-            ? '' : `- ${measures[index]}`}`}
-        </p>
-      ))}
-      <iframe
-        data-testid="video"
-        width="360"
-        height="315"
-        src={ linkYoutube }
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer;
-         autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
+      <div style={ { display: 'flex', flexDirection: 'column' } }>
+        {ingredients.map((ingredient, index) => (
+          <label
+            key={ ingredient }
+            htmlFor={ ingredient }
+            data-testid={ `${index}-ingredient-step` }
+            onChange={ () => saveProgress(ingredient, 'meals') }
+          >
+            <input type="checkbox" name={ ingredient } id={ ingredient } />
+            {ingredient}
+          </label>
+        ))}
+      </div>
       <p data-testid="instructions">{strInstructions}</p>
-      <Recommendation />
       <footer
         style={ { position: 'fixed', width: '100%', bottom: 0 } }
       >
-        <button
-          data-testid="start-recipe-btn"
-          type="button"
-          onClick={ () => history.push(`/foods/${id}/in-progress`) }
-        >
-          Start Recipe
+        <button type="button" data-testid="finish-recipe-btn">
+          Finish Recipe
         </button>
       </footer>
     </div>
   );
 }
 
-export default RecipesDetails;
+export default RecipeInProgress;

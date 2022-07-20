@@ -8,6 +8,10 @@ const TWELVE = 12;
 const error = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function Provider({ children }) {
+  const [obj, setObj] = useState({
+    meals: {},
+    cocktails: {},
+  });
   const [foods, setFoods] = useState([]);
   const [drinks, setDrinks] = useState([]);
   const [filters, setFilters] = useState({ filter: '', search: '' });
@@ -15,6 +19,21 @@ function Provider({ children }) {
   const [urlDrink, setUrlDrink] = useState('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   const [categoryName, setCategoryName] = useState('');
   const history = useHistory();
+  const { pathname } = history.location;
+  const id = pathname.split('/')[2];
+
+  useEffect(() => {
+    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (recipesInProgress) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(recipesInProgress));
+    } else if (pathname.includes('drinks')) {
+      localStorage.setItem('inProgressRecipes',
+        JSON.stringify({ ...obj, cocktails: { [id]: [] } }));
+    } else {
+      localStorage.setItem('inProgressRecipes',
+        JSON.stringify({ ...obj, meals: { [id]: [] } }));
+    }
+  }, [obj, id, pathname]);
 
   useEffect(() => {
     const fetchApiFood = async () => {
@@ -49,7 +68,6 @@ function Provider({ children }) {
   }, [urlDrink]);
 
   useEffect(() => {
-    const { pathname } = history.location;
     const fetchAPIFilters = () => {
       if (pathname === '/foods' && filters.search === 'chicken') {
         return setUrl('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
@@ -72,7 +90,7 @@ function Provider({ children }) {
       }
     };
     fetchAPIFilters();
-  }, [filters, history]);
+  }, [filters, pathname]);
 
   return (
     <context.Provider
@@ -82,7 +100,10 @@ function Provider({ children }) {
         setDrinks,
         setFoods,
         setCategoryName,
-        categoryName } }
+        categoryName,
+        obj,
+        setObj,
+      } }
     >
       {children}
     </context.Provider>
