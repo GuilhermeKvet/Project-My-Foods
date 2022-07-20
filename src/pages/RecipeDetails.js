@@ -143,7 +143,7 @@ function RecipesDetails() {
       ))}
       <iframe
         data-testid="video"
-        width="560"
+        width="360"
         height="315"
         src={ linkYoutube }
         title="YouTube video player"
