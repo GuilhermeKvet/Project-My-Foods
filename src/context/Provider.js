@@ -26,12 +26,9 @@ function Provider({ children }) {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (recipesInProgress) {
       localStorage.setItem('inProgressRecipes', JSON.stringify(recipesInProgress));
-    } else if (pathname.includes('drinks')) {
-      localStorage.setItem('inProgressRecipes',
-        JSON.stringify({ ...obj, cocktails: { [id]: [] } }));
     } else {
       localStorage.setItem('inProgressRecipes',
-        JSON.stringify({ ...obj, meals: { [id]: [] } }));
+        JSON.stringify(obj));
     }
   }, [obj, id, pathname]);
 
