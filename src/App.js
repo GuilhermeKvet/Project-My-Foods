@@ -6,11 +6,20 @@ import Drinks from './pages/Drinks';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import RecipeDetails from './pages/RecipeDetails';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
     <Provider>
       <Switch>
+        <Route
+          path="/drinks/:id/in-progress"
+          component={ RecipeInProgress }
+        />
+        <Route
+          path="/foods/:id/in-progress"
+          component={ RecipeInProgress }
+        />
         <Route
           path="/drinks/:id"
           component={ RecipeDetails }

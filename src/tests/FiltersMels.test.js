@@ -19,19 +19,19 @@ describe('Filtros Foods', () => {
     beforeEach(async () => {
         global.fetch = jest.fn((url) =>
         Promise.resolve({
-            json: () => {
-                if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return Promise.resolve(mealCategories);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken') return Promise.resolve(chickenMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=beef') return Promise.resolve(beefMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=breafast') return Promise.resolve(breakfastMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=dessert') return Promise.resolve(dessertMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=goat') return Promise.resolve(goatMeals);
-                if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return Promise.resolve(drinks)
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
-                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=') return Promise.resolve(mealsByIngredient);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=soup') return Promise.resolve(soupMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=y') return Promise.resolve(firstLetterMeals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=z') return Promise.resolve(emptyMeals);
+            json: async () => {
+                if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return (mealCategories);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken') return (chickenMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=beef') return (beefMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=breafast') return (breakfastMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=dessert') return (dessertMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=goat') return (goatMeals);
+                if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return (drinks)
+                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return (meals)
+                if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=') return (mealsByIngredient);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=soup') return (soupMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=y') return (firstLetterMeals);
+                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=z') return (emptyMeals);
             },
           })
         );
