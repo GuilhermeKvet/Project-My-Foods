@@ -16,7 +16,7 @@ import drinks from '../../cypress/mocks/drinks';
 // import mealCategories from '../../cypress/mocks/mealCategories';
 import drinkCategories from '../../cypress/mocks/drinkCategories';
 
-const drinkInstrucoes = /Pour the Galliano liqueur over ice. Fill the remainder of the glass with ginger ale and thats all there is to it/i;
+const drinkInstrucoes = 'Pour the Galliano liqueur over ice. Fill the remainder of the glass with ginger ale and thats all there is to it';
 
 describe('Testa pagina de detalhes para Drinks', () => {
     beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('Testa pagina de detalhes para Drinks', () => {
             json: () => {
                 if (url === 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list') return Promise.resolve(drinkCategories); 
                 if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return Promise.resolve(drinks)
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
+                // if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
             },
           })
         );
@@ -36,7 +36,7 @@ describe('Testa pagina de detalhes para Drinks', () => {
 
   it('Renderiza elementos corretamente dentro da pagina de detalhes',() => {
     const ggElement = screen.getByTestId('0-recipe-card');
-    expect(corbaElement).toBeInTheDocument();
+    expect(ggElement).toBeInTheDocument();
     userEvent.click(ggElement);
 
     expect(screen.getByText(/gg/i)).toBeInTheDocument();
