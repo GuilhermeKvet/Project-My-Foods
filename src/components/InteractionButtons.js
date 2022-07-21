@@ -73,7 +73,9 @@ function InteractionButtons({ recipe }) {
   };
 
   const copyLink = () => {
-    copy(window.location.href);
+    const linkURL = window.location.href;
+    const newLinkURL = linkURL.replace('/in-progress', '');
+    copy(newLinkURL);
     setIsShare(true);
     setTimeout(() => setIsShare(false), THREE_MILLISECONDS);
   };
