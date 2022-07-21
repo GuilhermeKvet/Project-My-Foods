@@ -66,6 +66,7 @@ function Provider({ children }) {
         global.alert(error);
         return null;
       }
+      console.log(data.meals === undefined && data);
       const foodList = data.meals.slice(0, TWELVE);
       setFoods(foodList);
     };
