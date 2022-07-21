@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import InteractionButtons from '../components/InteractionButtons';
 import Recommendation from '../components/Recommendation';
+import context from '../context/context';
 
 function RecipesDetails() {
+  const { setIsSaveLocal } = useContext(context);
   const history = useHistory();
   const { pathname } = history.location;
   const [recipe, setRecipe] = useState({});
@@ -58,7 +60,7 @@ function RecipesDetails() {
         {ingredients.map((ingredient, index) => (
           <p
             data-testid={ `${index}-ingredient-name-and-measure` }
-            key={ ingredient }
+            key={ `${index}-${ingredient}` }
           >
             {`${ingredient}  ${measures[index] === undefined
               ? '' : `- ${measures[index]}`}`}
@@ -72,7 +74,10 @@ function RecipesDetails() {
           <button
             data-testid="start-recipe-btn"
             type="button"
-            onClick={ () => history.push(`/drinks/${id}/in-progress`) }
+            onClick={ () => {
+              history.push(`/drinks/${id}/in-progress`);
+              setIsSaveLocal('saveLocalStorageDrink');
+            } }
           >
             Start Recipe
           </button>
@@ -115,7 +120,7 @@ function RecipesDetails() {
       {ingredients.map((ingredient, index) => (
         <p
           data-testid={ `${index}-ingredient-name-and-measure` }
-          key={ ingredient }
+          key={ `${index}-${ingredient}` }
         >
           {`${ingredient}  ${measures[index] === undefined
             ? '' : `- ${measures[index]}`}`}
@@ -140,7 +145,10 @@ function RecipesDetails() {
         <button
           data-testid="start-recipe-btn"
           type="button"
-          onClick={ () => history.push(`/foods/${id}/in-progress`) }
+          onClick={ () => {
+            history.push(`/foods/${id}/in-progress`);
+            setIsSaveLocal('saveLocalStorageMeal');
+          } }
         >
           Start Recipe
         </button>

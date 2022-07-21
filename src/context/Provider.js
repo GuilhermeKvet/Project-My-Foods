@@ -11,19 +11,52 @@ function Provider({ children }) {
   const [inProgressRecipes] = useState({ meals: {}, cocktails: {} });
   const [foods, setFoods] = useState([]);
   const [drinks, setDrinks] = useState([]);
+  const [isSaveLocal, setIsSaveLocal] = useState('');
   const [filters, setFilters] = useState({ filter: '', search: '' });
   const [url, setUrl] = useState('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   const [urlDrink, setUrlDrink] = useState('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
   const [categoryName, setCategoryName] = useState('');
   const history = useHistory();
   const { pathname } = history.location;
+  const id = pathname.split('/')[2];
+  const page = pathname.includes('drinks') ? 'cocktails' : 'meals';
 
   useEffect(() => {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (!recipesInProgress) {
-      localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
+    if (id) {
+      if (!recipesInProgress) {
+        const newRecipesInProgress = {
+          ...inProgressRecipes,
+          [page]: {
+            ...inProgressRecipes[page],
+            [id]: [],
+          },
+        };
+        localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
+        setIsSaveLocal('updateState');
+      } else if (recipesInProgress[page][id]) {
+        const newRecipesInProgress = {
+          ...recipesInProgress,
+          [page]: {
+            ...recipesInProgress[page],
+            [id]: [...recipesInProgress[page][id]],
+          },
+        };
+        localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
+        setIsSaveLocal('updateState');
+      } else {
+        const newRecipesInProgress = {
+          ...recipesInProgress,
+          [page]: {
+            ...recipesInProgress[page],
+            [id]: [],
+          },
+        };
+        localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
+        setIsSaveLocal('updateState');
+      }
     }
-  }, [inProgressRecipes]);
+  }, [inProgressRecipes, id, page, isSaveLocal]);
 
   useEffect(() => {
     const fetchApiFood = async () => {
@@ -91,6 +124,8 @@ function Provider({ children }) {
         setFoods,
         setCategoryName,
         categoryName,
+        isSaveLocal,
+        setIsSaveLocal,
       } }
     >
       {children}

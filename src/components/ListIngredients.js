@@ -1,58 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import context from '../context/context';
 
 function ListIngredients({ recipe, setIsFinish }) {
+  const { isSaveLocal, setIsSaveLocal } = useContext(context);
   const history = useHistory();
   const { pathname } = history.location;
   const [ingredients, setIngredients] = useState([]);
   const id = pathname.split('/')[2];
   const page = pathname.includes('drinks') ? 'cocktails' : 'meals';
-
-  const checkBox = () => {
-    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    const listIngredientsLocal = recipesInProgress[page][id];
-    listIngredientsLocal.forEach((ing) => {
-      if (document.getElementById(ing)) {
-        document.getElementById(ing).setAttribute('checked', true);
-      }
-    });
-  };
-
-  useEffect(() => {
-    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (pathname.includes('drinks') && recipesInProgress?.cocktails[id]) {
-      checkBox();
-    }
-    if (recipesInProgress?.meals[id]) {
-      checkBox();
-    }
-  });
+  const [listIngredientsLocal, setListIngredientsLocal] = useState([]);
 
   useEffect(() => {
     const listRecipe = Object.entries(recipe);
     const listAllIngredients = listRecipe
       .filter((arr) => arr[0].includes('strIngredient'));
     const listIngredients = listAllIngredients.filter((arr) => arr[1]);
-    const allIngredients = listIngredients.reduce((acc, arr) => {
-      acc = [...acc, arr[1]];
+    const allIngredients = listIngredients.reduce((acc, arr, index) => {
+      acc = [...acc, `${index}-${arr[1]}`];
       return acc;
     }, []);
     setIngredients(allIngredients);
   }, [recipe]);
 
-  const markedIngredients = () => {
-    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    ingredients.forEach((_ing, index) => {
-      if (ingredients.some((i) => i === recipesInProgress[page][id][index])) {
-        setIsFinish(false);
-      } else {
-        setIsFinish(true);
-      }
-    });
-  };
-
   const saveProgress = (ing) => {
+    setIsSaveLocal('saveLocalStorage');
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
     if (recipesInProgress[page][id]) {
       const isSaveIngredient = recipesInProgress[page][id].some((i) => i === ing);
@@ -65,7 +38,6 @@ function ListIngredients({ recipe, setIsFinish }) {
           },
         };
         localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
-        markedIngredients();
       } else {
         const newRecipesInProgress = {
           ...recipesInProgress,
@@ -75,7 +47,6 @@ function ListIngredients({ recipe, setIsFinish }) {
           },
         };
         localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
-        markedIngredients();
       }
     } else {
       const newRecipesInProgress = {
@@ -86,15 +57,55 @@ function ListIngredients({ recipe, setIsFinish }) {
         },
       };
       localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
-      markedIngredients();
     }
   };
 
+  useEffect(() => {
+    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (recipesInProgress && ingredients.length > 0) {
+      setListIngredientsLocal(recipesInProgress[page][id]);
+      const isMarkedIngredients = () => {
+        ingredients.forEach((_ing, index) => {
+          if (ingredients.some((i) => i === recipesInProgress[page][id][index])) {
+            setIsFinish(false);
+          } else {
+            setIsFinish(true);
+          }
+        });
+      };
+      isMarkedIngredients();
+    }
+  }, [isSaveLocal, ingredients, id, page, setIsFinish]);
+
+  if (listIngredientsLocal.length > 0) {
+    return (
+      <div style={ { display: 'flex', flexDirection: 'column' } }>
+        {ingredients.map((ingredient, index) => (
+          <label
+            key={ ingredient }
+            htmlFor={ ingredient }
+            data-testid={ `${index}-ingredient-step` }
+            onChange={ () => saveProgress(ingredient) }
+          >
+            <input
+              type="checkbox"
+              name={ ingredient }
+              id={ ingredient }
+              value={ ingredient }
+              checked={ listIngredientsLocal
+                .some((i) => i === ingredient) }
+            />
+            {ingredient}
+          </label>
+        ))}
+      </div>
+    );
+  }
   return (
     <div style={ { display: 'flex', flexDirection: 'column' } }>
       {ingredients.map((ingredient, index) => (
         <label
-          key={ `${index}-ingredient` }
+          key={ ingredient }
           htmlFor={ ingredient }
           data-testid={ `${index}-ingredient-step` }
           onChange={ () => saveProgress(ingredient) }
@@ -104,6 +115,7 @@ function ListIngredients({ recipe, setIsFinish }) {
             name={ ingredient }
             id={ ingredient }
             value={ ingredient }
+            defaultChecked={ false }
           />
           {ingredient}
         </label>
