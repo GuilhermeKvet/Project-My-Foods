@@ -1,7 +1,7 @@
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import userEvent from '@testing-library/user-event';
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import meals from  '../../cypress/mocks/meals';
 // import chickenMeals from '../../cypress/mocks/chickenMeals';
 // import goatMeals from '../../cypress/mocks/goatMeals';
@@ -14,6 +14,7 @@ import drinks from '../../cypress/mocks/drinks';
 // import firstLetterMeals from './mocks/firstLetterMeals';
 // import emptyMeals from '../../cypress/mocks/emptyMeals';
 import mealCategories from '../../cypress/mocks/mealCategories';
+
 
 const corbaInstrucoes = /pick through your lentils for any foreign debris, rinse them 2 or 3 times/i;
 const TIMEOUT_2000 = 2000;
@@ -55,9 +56,38 @@ describe('Testa pagina de detalhes para Meals', () => {
 
       // expect(screen.getAllByText(corbaInstrucoes)).toBeInTheDocument()
       
-      expect(screen.getByText(/Recommendations/i)).toBeInTheDocument();
-      expect(screen.getByTestId('video')).toBeInTheDocument();
       // expect(screen.getByText(/start recipe/i)).toBeInTheDocument();
+    })
+    it('Usuario consegue interagir com o video ', async () => {
+      expect(screen.getByTestId('video')).toBeInTheDocument();
+      expect(screen.getByTitle(/youtube video player/i)).toBeInTheDocument();
+      userEvent.click(screen.getByTitle(/youtube video player/i))
+      userEvent.click(screen.getByTitle(/youtube video player/i))
+    })
+    it('As recomendações aparecem na tela',() => {
+      expect(screen.getByText(/Recommendations/i)).toBeInTheDocument();
+      // expect(screen.getByText(/GG/i)).toBeInTheDocument()
+      expect(screen.getByTestId('0-recomendation-title')).toBeInTheDocument()
+      expect(screen.getByTestId('1-recomendation-title')).toBeInTheDocument()
+      expect(screen.getByTestId('2-recomendation-title')).toBeInTheDocument()
+      expect(screen.getByTestId('3-recomendation-title')).toBeInTheDocument()
+      expect(screen.getByTestId('4-recomendation-title')).toBeInTheDocument()
+      expect(screen.getByTestId('5-recomendation-title')).toBeInTheDocument()
   })
-  
+  it('Contem botões de left & right e Star Recipe', () => {
+    expect(screen.getByRole('button', {name: /left/i})).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: /right/i})).toBeInTheDocument();
+    expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument()
+  })
+  it('ao clicar em Star recipe deve redenrizar a rota "in-progres"', async () => {
+    expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument()
+    userEvent.click(screen.getByTestId('start-recipe-btn'))
+    await waitFor(() => 
+    expect(screen.getByTestId('0-ingredient-step')).toHaveTextContent('Lentils'))
+    userEvent.click(screen.getByRole('checkbox', { name: /Lentils/i }))
+    expect(screen.getByTestId('1-ingredient-step')).toHaveTextContent('Onion')
+    userEvent.click(screen.getByRole('checkbox', { name: /Onion/i }))
+    expect(screen.getByTestId('instructions')).toBeInTheDocument()
+    expect(screen.getByTestId('finish-recipe-btn')).toBeInTheDocument()
+  })
 });

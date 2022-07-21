@@ -1,7 +1,7 @@
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import userEvent from '@testing-library/user-event';
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import meals from  '../../cypress/mocks/meals';
 // import chickenMeals from '../../cypress/mocks/chickenMeals';
 // import goatMeals from '../../cypress/mocks/goatMeals';
@@ -28,7 +28,7 @@ describe('Testa pagina de detalhes para Drinks', () => {
               if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=gg') return Promise.resolve(drinks);
                 if (url === 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list') return Promise.resolve(drinkCategories); 
                 if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return Promise.resolve(drinks)
-                // if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
+                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
             },
           })
         );
@@ -50,8 +50,7 @@ describe('Testa pagina de detalhes para Drinks', () => {
       expect(screen.getByTestId('2-ingredient-name-and-measure')).toHaveTextContent(/ice/i);
 
       expect(screen.getByText(drinkInstrucoes)).toBeInTheDocument();
-      expect(screen.getByText(/recommendations/i)).toBeInTheDocument();
-
+      
       expect(screen.getByRole('img', { name: /corba/i })).toBeInTheDocument();
       expect(screen.getByRole('img', { name: /kumpir/i })).toBeInTheDocument();
       expect(screen.getByRole('img', { name: /dal fry/i })).toBeInTheDocument();
@@ -60,5 +59,36 @@ describe('Testa pagina de detalhes para Drinks', () => {
       expect(screen.getByRole('img', { name: /timbits/i })).toBeInTheDocument();
 
       // expect(screen.getByText(/start recipe/i)).toBeInTheDocument();
+    })
+    it('As recomendações aparecem na tela',() => {
+      expect(screen.getByText(/recommendations/i)).toBeInTheDocument();
+      expect(screen.getByTestId('0-recomendation-card')).toBeInTheDocument()
+      // expect(screen.getAllByTestId('0-recomendation-card')).toHaveTextContent('')
+      expect(screen.getByTestId('1-recomendation-card')).toBeInTheDocument()
+      expect(screen.getByTestId('1-recomendation-card')).toHaveTextContent('Kumpir')
+      expect(screen.getByTestId('2-recomendation-card')).toBeInTheDocument()
+      expect(screen.getByTestId('3-recomendation-card')).toBeInTheDocument()
+      expect(screen.getByTestId('4-recomendation-card')).toBeInTheDocument()
+      expect(screen.getByTestId('5-recomendation-card')).toBeInTheDocument()
+
+    })
+    it('Contem botões de left & right e Star Recipe', () => {
+      expect(screen.getByRole('button', {name: /left/i})).toBeInTheDocument();
+      expect(screen.getByRole('button', {name: /right/i})).toBeInTheDocument();
+      expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument()
+    })
+    it('ao clicar em Star recipe deve redenrizar a rota "in-progres"', async () => {
+      expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument()
+      userEvent.click(screen.getByTestId('start-recipe-btn'))
+      await waitFor(() => {
+      expect(screen.getByTestId('0-ingredient-step')).toHaveTextContent('Galliano');
+      userEvent.click(screen.getByRole('checkbox', { name: /galliano/i }))
+      expect(screen.getByTestId('1-ingredient-step')).toHaveTextContent('Ginger ale')
+      userEvent.click(screen.getByRole('checkbox', { name: /ginger ale/i }))
+      expect(screen.getByTestId('2-ingredient-step')).toHaveTextContent('Ice')
+      userEvent.click(screen.getByRole('checkbox', { name: /ice/i }))
+      expect(screen.getByTestId('instructions')).toBeInTheDocument()
+      expect(screen.getByTestId('finish-recipe-btn')).toBeInTheDocument()
+      })
     })
 });
