@@ -1,37 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import InteractionButtons from '../components/InteractionButtons';
-import context from '../context/context';
+import ListIngredients from '../components/ListIngredients';
 
 function RecipeInProgress() {
   const [recipe, setRecipe] = useState({});
-  const { obj } = useContext(context);
   const history = useHistory();
   const { pathname } = history.location;
   const id = pathname.split('/')[2];
-
-  const saveProgress = (ing, page) => {
-    const progress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (progress[page][id]) {
-      const newObj = {
-        ...obj,
-        [page]: {
-          ...progress[page],
-          [id]: [...progress[page][id], ing],
-        },
-      };
-      localStorage.setItem('inProgressRecipes', JSON.stringify(newObj));
-    } else {
-      const newObj = {
-        ...progress,
-        [page]: {
-          ...progress[page],
-          [id]: [ing],
-        },
-      };
-      localStorage.setItem('inProgressRecipes', JSON.stringify(newObj));
-    }
-  };
+  const [isFinish, setIsFinish] = useState(true);
 
   useEffect(() => {
     const fetchApiById = async () => {
@@ -50,16 +27,6 @@ function RecipeInProgress() {
 
   if (pathname.includes('/drinks')) {
     const { strDrinkThumb, strDrink, strAlcoholic, strInstructions } = recipe;
-
-    const listRecipe = Object.entries(recipe);
-    const listAllIngredients = listRecipe
-      .filter((arr) => arr[0].includes('strIngredient'));
-    const listIngredients = listAllIngredients.filter((arr) => arr[1]);
-    const ingredients = listIngredients.reduce((acc, arr) => {
-      acc = [...acc, arr[1]];
-      return acc;
-    }, []);
-
     return (
       <div>
         <img
@@ -71,28 +38,12 @@ function RecipeInProgress() {
         <h2 data-testid="recipe-title">{strDrink}</h2>
         <InteractionButtons recipe={ recipe } />
         <p data-testid="recipe-category">{strAlcoholic}</p>
-        <div style={ { display: 'flex', flexDirection: 'column' } }>
-          {ingredients.map((ingredient, index) => (
-            <label
-              key={ ingredient }
-              htmlFor={ ingredient }
-              data-testid={ `${index}-ingredient-step` }
-              onChange={ () => saveProgress(ingredient, 'cocktails') }
-            >
-              <input
-                type="checkbox"
-                name={ ingredient }
-                id={ ingredient }
-              />
-              {ingredient}
-            </label>
-          ))}
-        </div>
+        <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
         <p data-testid="instructions">{strInstructions}</p>
         <footer
           style={ { position: 'fixed', width: '100%', bottom: 0 } }
         >
-          <button type="button" data-testid="finish-recipe-btn">
+          <button type="button" data-testid="finish-recipe-btn" disabled={ isFinish }>
             Finish Recipe
           </button>
         </footer>
@@ -101,15 +52,6 @@ function RecipeInProgress() {
   }
 
   const { strMealThumb, strMeal, strCategory, strInstructions } = recipe;
-  const listRecipe = Object.entries(recipe);
-  const listAllIngredients = listRecipe
-    .filter((arr) => arr[0].includes('strIngredient'));
-  const listIngredients = listAllIngredients.filter((arr) => arr[1]);
-  const ingredients = listIngredients.reduce((acc, arr) => {
-    acc = [...acc, arr[1]];
-    return acc;
-  }, []);
-
   return (
     <div>
       <img
@@ -121,24 +63,12 @@ function RecipeInProgress() {
       <h2 data-testid="recipe-title">{strMeal}</h2>
       <InteractionButtons recipe={ recipe } />
       <h3 data-testid="recipe-category">{strCategory}</h3>
-      <div style={ { display: 'flex', flexDirection: 'column' } }>
-        {ingredients.map((ingredient, index) => (
-          <label
-            key={ ingredient }
-            htmlFor={ ingredient }
-            data-testid={ `${index}-ingredient-step` }
-            onChange={ () => saveProgress(ingredient, 'meals') }
-          >
-            <input type="checkbox" name={ ingredient } id={ ingredient } />
-            {ingredient}
-          </label>
-        ))}
-      </div>
+      <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
       <p data-testid="instructions">{strInstructions}</p>
       <footer
         style={ { position: 'fixed', width: '100%', bottom: 0 } }
       >
-        <button type="button" data-testid="finish-recipe-btn">
+        <button type="button" data-testid="finish-recipe-btn" disabled={ isFinish }>
           Finish Recipe
         </button>
       </footer>

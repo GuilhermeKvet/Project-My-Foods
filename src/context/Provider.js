@@ -8,10 +8,7 @@ const TWELVE = 12;
 const error = 'Sorry, we haven\'t found any recipes for these filters.';
 
 function Provider({ children }) {
-  const [obj, setObj] = useState({
-    meals: {},
-    cocktails: {},
-  });
+  const [inProgressRecipes] = useState({ meals: {}, cocktails: {} });
   const [foods, setFoods] = useState([]);
   const [drinks, setDrinks] = useState([]);
   const [filters, setFilters] = useState({ filter: '', search: '' });
@@ -20,17 +17,13 @@ function Provider({ children }) {
   const [categoryName, setCategoryName] = useState('');
   const history = useHistory();
   const { pathname } = history.location;
-  const id = pathname.split('/')[2];
 
   useEffect(() => {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (recipesInProgress) {
-      localStorage.setItem('inProgressRecipes', JSON.stringify(recipesInProgress));
-    } else {
-      localStorage.setItem('inProgressRecipes',
-        JSON.stringify(obj));
+    if (!recipesInProgress) {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(inProgressRecipes));
     }
-  }, [obj, id, pathname]);
+  }, [inProgressRecipes]);
 
   useEffect(() => {
     const fetchApiFood = async () => {
@@ -99,8 +92,6 @@ function Provider({ children }) {
         setFoods,
         setCategoryName,
         categoryName,
-        obj,
-        setObj,
       } }
     >
       {children}
