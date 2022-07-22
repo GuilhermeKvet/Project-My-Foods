@@ -29,7 +29,7 @@ function Recipes() {
       );
     }
     return (
-      foods.length > 0 && (
+      foods?.length > 0 && (
         foods.map((recipe, index) => {
           const { strMealThumb, idMeal, strMeal } = recipe;
           return (

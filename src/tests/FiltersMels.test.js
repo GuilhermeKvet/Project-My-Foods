@@ -13,23 +13,30 @@ import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
 import firstLetterMeals from './mocks/firstLetterMeals';
 import emptyMeals from '../../cypress/mocks/emptyMeals';
 import mealCategories from '../../cypress/mocks/mealCategories';
+import mockGoat from './mocks/mockGoat';
+import mockCorba from './mocks/mockCorba';
+import corbaName from './mocks/mockCorbaName';
 
 describe('Filtros Foods', () => {
   beforeEach(async () => {
     global.fetch = jest.fn((url) =>
     Promise.resolve({
       json: async () => {
+        console.log(url)
         if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return mealCategories;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Chicken') return chickenMeals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef') return beefMeals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Breakfast') return breakfastMeals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Dessert') return dessertMeals
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Goat') return goatMeals;
+        if (url === 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52968') return mockGoat
         if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return drinks;
         if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return meals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?i=') return mealsByIngredient;
         if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=y') return firstLetterMeals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?f=z') return emptyMeals;
+        if (url === 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52977') return mockCorba;
+        if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=Corba') return corbaName
       },
     }));
     await act(async () => {
@@ -88,6 +95,7 @@ describe('Filtros Foods', () => {
     const goatCategoryBtn = screen.getByRole('button', {name: /goat/i})
     userEvent.click(goatCategoryBtn);
     expect(await screen.findByText('Mbuzi Choma (Roasted Goat)')).toBeInTheDocument();
+    
     // expect(screen.findByTestId(/-recipe-card/).length).toEqual(1)
   });
   it('Ao clicar no botão na categaria duas vezes , seleciona e desselecionar', async () => {
@@ -96,6 +104,17 @@ describe('Filtros Foods', () => {
     expect(await screen.findByText(/Breakfast Potatoes/i)).toBeInTheDocument();
     userEvent.click(breakfastButton);
     expect(await screen.findByText(/Corba/i)).toBeInTheDocument();
+    userEvent.click(breakfastButton)
+  })
+  it('test', async () => {
+    userEvent.click(screen.getByRole('button', {  name: /goat/i}))
+    userEvent.click(await screen.findByRole('heading', { name: /mbuzi choma \(roasted goat\)/i }))
+  })
+  it('corba', async () => {
+    userEvent.click(await screen.findByRole('button', { name: /search\-icon/i }))
+    userEvent.click(await screen.findByRole('radio', { name: /name/i }))
+    userEvent.type(screen.getByRole('textbox'), 'Corba')
+    userEvent.click(screen.getByTestId('exec-search-btn'))
   })
 })
 
