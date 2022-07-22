@@ -38,7 +38,7 @@ function RecipeInProgress() {
       name: strDrink,
       image: strDrinkThumb,
       doneDate: new Date().toLocaleDateString(),
-      tags: strTags || '',
+      tags: strTags?.split(','),
     };
 
     return (
@@ -91,7 +91,7 @@ function RecipeInProgress() {
     name: strName,
     image: strMealThumb,
     doneDate: new Date().toLocaleDateString(),
-    tags: strTags,
+    tags: strTags?.split(','),
   };
 
   return (

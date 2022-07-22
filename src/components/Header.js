@@ -5,7 +5,7 @@ import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 import profileIcon from '../images/profileIcon.svg';
 
-function Header({ title }) {
+function Header({ title, isSearch }) {
   const history = useHistory();
   const [searchBarState, setSearchBarState] = useState(false);
   return (
@@ -15,13 +15,15 @@ function Header({ title }) {
           <img src={ profileIcon } alt="profile" data-testid="profile-top-btn" />
         </button>
         <h1 data-testid="page-title">{title}</h1>
-        <button type="button" onClick={ () => setSearchBarState(!searchBarState) }>
-          <img
-            src={ searchIcon }
-            alt="search-icon"
-            data-testid="search-top-btn"
-          />
-        </button>
+        {isSearch && (
+          <button type="button" onClick={ () => setSearchBarState(!searchBarState) }>
+            <img
+              src={ searchIcon }
+              alt="search-icon"
+              data-testid="search-top-btn"
+            />
+          </button>
+        )}
       </nav>
       {searchBarState && <SearchBar />}
     </header>
@@ -30,6 +32,7 @@ function Header({ title }) {
 
 Header.propTypes = {
   title: propTypes.string.isRequired,
+  isSearch: propTypes.bool.isRequired,
 };
 
 export default Header;

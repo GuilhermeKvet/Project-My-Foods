@@ -7,7 +7,7 @@ import Recipes from '../components/Recipes';
 function Drinks() {
   return (
     <>
-      <Header title="Drinks" />
+      <Header title="Drinks" isSearch />
       <Categories url="https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list" category="drinks" />
       <Recipes />
       <Footer />
