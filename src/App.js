@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import RecipeDetails from './pages/RecipeDetails';
 import RecipeInProgress from './pages/RecipeInProgress';
+import DoneRecipes from './pages/DoneRecipes';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           path="/foods/:id"
           component={ RecipeDetails }
         />
+        <Route path="/done-recipes" component={ DoneRecipes } />
         <Route path="/drinks" component={ Drinks } />
         <Route path="/profile" component={ Profile } />
         <Route path="/foods" component={ Foods } />

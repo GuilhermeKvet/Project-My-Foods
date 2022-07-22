@@ -23,7 +23,7 @@ function Provider({ children }) {
 
   useEffect(() => {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (id) {
+    if (id && pathname.includes('in-progress')) {
       if (!recipesInProgress) {
         const newRecipesInProgress = {
           ...inProgressRecipes,
@@ -56,7 +56,7 @@ function Provider({ children }) {
         setIsSaveLocal('updateState');
       }
     }
-  }, [inProgressRecipes, id, page, isSaveLocal]);
+  }, [inProgressRecipes, id, page, isSaveLocal, pathname]);
 
   useEffect(() => {
     const fetchApiFood = async () => {
@@ -66,7 +66,6 @@ function Provider({ children }) {
         global.alert(error);
         return null;
       }
-      console.log(data.meals === undefined && data);
       const foodList = data.meals.slice(0, TWELVE);
       setFoods(foodList);
     };

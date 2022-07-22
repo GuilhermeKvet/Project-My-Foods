@@ -85,15 +85,14 @@ function ListIngredients({ recipe, setIsFinish }) {
             key={ ingredient }
             htmlFor={ ingredient }
             data-testid={ `${index}-ingredient-step` }
-            onChange={ () => saveProgress(ingredient) }
           >
             <input
               type="checkbox"
               name={ ingredient }
               id={ ingredient }
               value={ ingredient }
-              checked={ listIngredientsLocal
-                .some((i) => i === ingredient) }
+              onClick={ () => saveProgress(ingredient) }
+              defaultChecked={ listIngredientsLocal.some((i) => i === ingredient) }
             />
             {ingredient}
           </label>
@@ -101,6 +100,7 @@ function ListIngredients({ recipe, setIsFinish }) {
       </div>
     );
   }
+
   return (
     <div style={ { display: 'flex', flexDirection: 'column' } }>
       {ingredients.map((ingredient, index) => (
@@ -108,14 +108,13 @@ function ListIngredients({ recipe, setIsFinish }) {
           key={ ingredient }
           htmlFor={ ingredient }
           data-testid={ `${index}-ingredient-step` }
-          onChange={ () => saveProgress(ingredient) }
         >
           <input
             type="checkbox"
             name={ ingredient }
             id={ ingredient }
             value={ ingredient }
-            defaultChecked={ false }
+            onClick={ () => saveProgress(ingredient) }
           />
           {ingredient}
         </label>

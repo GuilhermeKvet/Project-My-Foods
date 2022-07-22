@@ -43,7 +43,12 @@ function RecipeInProgress() {
         <footer
           style={ { position: 'fixed', width: '100%', bottom: 0 } }
         >
-          <button type="button" data-testid="finish-recipe-btn" disabled={ isFinish }>
+          <button
+            type="button"
+            data-testid="finish-recipe-btn"
+            disabled={ isFinish }
+            onClick={ () => history.push('/done-recipes') }
+          >
             Finish Recipe
           </button>
         </footer>
@@ -68,7 +73,12 @@ function RecipeInProgress() {
       <footer
         style={ { position: 'fixed', width: '100%', bottom: 0 } }
       >
-        <button type="button" data-testid="finish-recipe-btn" disabled={ isFinish }>
+        <button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ isFinish }
+          onClick={ () => history.push('/done-recipes') }
+        >
           Finish Recipe
         </button>
       </footer>

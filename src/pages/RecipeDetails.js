@@ -5,11 +5,13 @@ import Recommendation from '../components/Recommendation';
 import context from '../context/context';
 
 function RecipesDetails() {
-  const { setIsSaveLocal } = useContext(context);
+  const { setIsSaveLocal, isSaveLocal } = useContext(context);
   const history = useHistory();
   const { pathname } = history.location;
   const [recipe, setRecipe] = useState({});
   const id = pathname.split('/')[2];
+  const page = pathname.includes('drinks') ? 'cocktails' : 'meals';
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     const fetchApiById = async () => {
@@ -25,6 +27,17 @@ function RecipesDetails() {
     };
     fetchApiById();
   }, [id, pathname, setRecipe]);
+
+  useEffect(() => {
+    const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (recipesInProgress) {
+      const idsLocalStorage = Object.keys(recipesInProgress[page]);
+      const isProgress = idsLocalStorage.some((idLocal) => idLocal === id);
+      if (isProgress) {
+        setInProgress(true);
+      }
+    }
+  }, [isSaveLocal, id, page]);
 
   if (pathname.includes('/drinks')) {
     const { strDrinkThumb, strDrink,
@@ -68,20 +81,17 @@ function RecipesDetails() {
         ))}
         <p data-testid="instructions">{strInstructions}</p>
         <Recommendation />
-        <footer
-          style={ { position: 'fixed', width: '100%', bottom: 0 } }
+        <button
+          data-testid="start-recipe-btn"
+          type="button"
+          style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
+          onClick={ () => {
+            history.push(`/drinks/${id}/in-progress`);
+            setIsSaveLocal('saveLocalStorageDrink');
+          } }
         >
-          <button
-            data-testid="start-recipe-btn"
-            type="button"
-            onClick={ () => {
-              history.push(`/drinks/${id}/in-progress`);
-              setIsSaveLocal('saveLocalStorageDrink');
-            } }
-          >
-            Start Recipe
-          </button>
-        </footer>
+          {inProgress ? 'Continue Recipe' : 'Start Recipe'}
+        </button>
       </div>
     );
   }
@@ -139,20 +149,18 @@ function RecipesDetails() {
       />
       <p data-testid="instructions">{strInstructions}</p>
       <Recommendation />
-      <footer
-        style={ { position: 'fixed', width: '100%', bottom: 0 } }
+      <button
+        data-testid="start-recipe-btn"
+        style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
+        type="button"
+        onClick={ () => {
+          history.push(`/foods/${id}/in-progress`);
+          setIsSaveLocal('saveLocalStorageMeal');
+        } }
       >
-        <button
-          data-testid="start-recipe-btn"
-          type="button"
-          onClick={ () => {
-            history.push(`/foods/${id}/in-progress`);
-            setIsSaveLocal('saveLocalStorageMeal');
-          } }
-        >
-          Start Recipe
-        </button>
-      </footer>
+        {inProgress ? 'Continue Recipe' : 'Start Recipe'}
+      </button>
+
     </div>
   );
 }
