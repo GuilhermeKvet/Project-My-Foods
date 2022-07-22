@@ -8,6 +8,9 @@ import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
 import milkDrinks from '../../cypress/mocks/milkDrinks';
 import otherDrinks from '../../cypress/mocks/otherDrinks';
 import cocoaDrinks from '../../cypress/mocks/cocoaDrinks'
+import oneDrinkId15997 from '../../cypress/mocks/oneDrinkId15997';
+import mockYellow from './mocks/mockYellow';
+import mockYellowName from './mocks/mockYellowName';
 
 import App from '../App';
 import drinks from '../../cypress/mocks/drinks';
@@ -18,6 +21,9 @@ describe('test drinks', () => {
     global.fetch = jest.fn((url) =>
       Promise.resolve({
         json: async () => {
+          if (url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=17219') return mockYellow;
+          if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Yellow') return mockYellowName;
+          if (url === 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=15997') return oneDrinkId15997;
           if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return meals;
           if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return drinks;
           if (url === 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list') return drinkCategories;
@@ -73,5 +79,15 @@ describe('test drinks', () => {
     expect(await screen.findByText(/151 Florida Bushwacker/i)).toBeInTheDocument();
     userEvent.click(shakeButton);
     expect(await screen.findByText(/GG/i)).toBeInTheDocument();
+    userEvent.click(shakeButton)
+  })
+  it('gg', async () => {
+    userEvent.click(await screen.findByRole('heading', { name: /gg/i }))
+  });
+  it('yellow', async () => {
+    userEvent.click(await screen.findByRole('button', { name: /search\-icon/i }))
+    userEvent.click(await screen.findByRole('radio', { name: /name/i }))
+    userEvent.type(screen.getByRole('textbox'), 'Yellow')
+    userEvent.click(screen.getByTestId('exec-search-btn'))
   })
 })

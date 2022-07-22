@@ -62,11 +62,11 @@ function Provider({ children }) {
     const fetchApiFood = async () => {
       const response = await fetch(url);
       const data = await response.json();
-      if (data.meals === null) {
+      if (data?.meals === null) {
         global.alert(error);
         return null;
       }
-      const foodList = data.meals.slice(0, TWELVE);
+      const foodList = data?.meals.slice(0, TWELVE);
       setFoods(foodList);
     };
     fetchApiFood();
