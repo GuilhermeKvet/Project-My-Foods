@@ -25,6 +25,13 @@ describe('interagir com os botões drinks',  () => {
         .toHaveAttribute('src', 'blackHeartIcon.svg')
     })
 
+    it('Link foi copiado',  () => {
+        renderWithRouter(<App />, '/drinks/15997')
+        
+    const shareButton = screen.getByTestId('share-btn');
+    userEvent.click(shareButton)
+    })
+
 })
 
 
