@@ -26,10 +26,11 @@ describe('interagir com os botões foods',() => {
         .toHaveAttribute('src', 'blackHeartIcon.svg')
         
     })
-    it('Link foi copiado',   () => {
-        renderWithRouter(<App />, '/drinks/15997')   
-        const shareB =  screen.getByTestId('share-btn');
-        expect(shareB).toBeInTheDocument();
-
+    // passou 
+    it('Link foi copiado',  () => {
+        renderWithRouter(<App />, '/foods/52977')
+        
+    const shareButton = screen.getByTestId('share-btn');
+    expect(shareButton).toBeInTheDocument();
     })
 })
