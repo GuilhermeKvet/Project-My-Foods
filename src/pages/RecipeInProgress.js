@@ -38,7 +38,7 @@ function RecipeInProgress() {
       name: strDrink,
       image: strDrinkThumb,
       doneDate: new Date().toLocaleDateString(),
-      tags: strTags?.split(','),
+      tags: strTags?.split(',') || [],
     };
 
     return (
@@ -80,7 +80,7 @@ function RecipeInProgress() {
   }
 
   const { strMealThumb,
-    strMeal, strCategory, strInstructions, idMeal, strArea, strTags, strName } = recipe;
+    strMeal, strCategory, strInstructions, idMeal, strArea, strTags } = recipe;
 
   const finishRecipeFoods = {
     id: idMeal,
@@ -88,10 +88,10 @@ function RecipeInProgress() {
     nationality: strArea,
     category: strCategory,
     alcoholicOrNot: '',
-    name: strName,
+    name: strMeal,
     image: strMealThumb,
     doneDate: new Date().toLocaleDateString(),
-    tags: strTags?.split(','),
+    tags: strTags?.split(',') || [],
   };
 
   return (
