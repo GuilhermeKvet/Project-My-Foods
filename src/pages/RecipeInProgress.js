@@ -26,7 +26,21 @@ function RecipeInProgress() {
   }, [id, pathname, setRecipe]);
 
   if (pathname.includes('/drinks')) {
-    const { strDrinkThumb, strDrink, strAlcoholic, strInstructions } = recipe;
+    const { strDrinkThumb, strDrink,
+      strInstructions, idDrink, strCategory, strAlcoholic, strTags } = recipe;
+
+    const finishRecipeDrinks = {
+      id: idDrink,
+      type: 'drink',
+      nationality: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+      doneDate: new Date().toLocaleDateString(),
+      tags: strTags || '',
+    };
+
     return (
       <div>
         <img
@@ -47,7 +61,16 @@ function RecipeInProgress() {
             type="button"
             data-testid="finish-recipe-btn"
             disabled={ isFinish }
-            onClick={ () => history.push('/done-recipes') }
+            onClick={ () => {
+              history.push('/done-recipes');
+              const finished = JSON.parse(localStorage.getItem('doneRecipes'));
+              if (!finished) {
+                localStorage.setItem('doneRecipes', JSON.stringify([finishRecipeDrinks]));
+              } else {
+                localStorage.setItem('doneRecipes',
+                  JSON.stringify([...finished, finishRecipeDrinks]));
+              }
+            } }
           >
             Finish Recipe
           </button>
@@ -56,7 +79,21 @@ function RecipeInProgress() {
     );
   }
 
-  const { strMealThumb, strMeal, strCategory, strInstructions } = recipe;
+  const { strMealThumb,
+    strMeal, strCategory, strInstructions, idMeal, strArea, strTags, strName } = recipe;
+
+  const finishRecipeFoods = {
+    id: idMeal,
+    type: 'food',
+    nationality: strArea,
+    category: strCategory,
+    alcoholicOrNot: '',
+    name: strName,
+    image: strMealThumb,
+    doneDate: new Date().toLocaleDateString(),
+    tags: strTags,
+  };
+
   return (
     <div>
       <img
@@ -77,7 +114,16 @@ function RecipeInProgress() {
           type="button"
           data-testid="finish-recipe-btn"
           disabled={ isFinish }
-          onClick={ () => history.push('/done-recipes') }
+          onClick={ () => {
+            history.push('/done-recipes');
+            const finished = JSON.parse(localStorage.getItem('doneRecipes'));
+            if (!finished) {
+              localStorage.setItem('doneRecipes', JSON.stringify([finishRecipeFoods]));
+            } else {
+              localStorage.setItem('doneRecipes',
+                JSON.stringify([...finished, finishRecipeFoods]));
+            }
+          } }
         >
           Finish Recipe
         </button>

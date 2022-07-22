@@ -12,6 +12,7 @@ function RecipesDetails() {
   const id = pathname.split('/')[2];
   const page = pathname.includes('drinks') ? 'cocktails' : 'meals';
   const [inProgress, setInProgress] = useState(false);
+  const [isFinish, setIsFinish] = useState(false);
 
   useEffect(() => {
     const fetchApiById = async () => {
@@ -35,6 +36,14 @@ function RecipesDetails() {
       const isProgress = idsLocalStorage.some((idLocal) => idLocal === id);
       if (isProgress) {
         setInProgress(true);
+      }
+    }
+
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (doneRecipes) {
+      const isFinished = doneRecipes.some((recipeLocal) => recipeLocal.id === id);
+      if (isFinished) {
+        setIsFinish(true);
       }
     }
   }, [isSaveLocal, id, page]);
@@ -81,17 +90,19 @@ function RecipesDetails() {
         ))}
         <p data-testid="instructions">{strInstructions}</p>
         <Recommendation />
-        <button
-          data-testid="start-recipe-btn"
-          type="button"
-          style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
-          onClick={ () => {
-            history.push(`/drinks/${id}/in-progress`);
-            setIsSaveLocal('saveLocalStorageDrink');
-          } }
-        >
-          {inProgress ? 'Continue Recipe' : 'Start Recipe'}
-        </button>
+        {!isFinish && (
+          <button
+            data-testid="start-recipe-btn"
+            type="button"
+            style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
+            onClick={ () => {
+              history.push(`/drinks/${id}/in-progress`);
+              setIsSaveLocal('saveLocalStorageDrink');
+            } }
+          >
+            {inProgress ? 'Continue Recipe' : 'Start Recipe'}
+          </button>
+        )}
       </div>
     );
   }
@@ -149,18 +160,18 @@ function RecipesDetails() {
       />
       <p data-testid="instructions">{strInstructions}</p>
       <Recommendation />
-      <button
-        data-testid="start-recipe-btn"
-        style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
-        type="button"
-        onClick={ () => {
-          history.push(`/foods/${id}/in-progress`);
-          setIsSaveLocal('saveLocalStorageMeal');
-        } }
-      >
-        {inProgress ? 'Continue Recipe' : 'Start Recipe'}
-      </button>
-
+      {!isFinish && (
+        <button
+          data-testid="start-recipe-btn"
+          style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
+          type="button"
+          onClick={ () => {
+            history.push(`/foods/${id}/in-progress`);
+            setIsSaveLocal('saveLocalStorageMeal');
+          } }
+        >
+          {inProgress ? 'Continue Recipe' : 'Start Recipe'}
+        </button>)}
     </div>
   );
 }
