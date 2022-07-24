@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import ButtonsFavorite from '../components/ButtonsFavorite';
 import Header from '../components/Header';
-import ShareButton from '../components/ShareButton';
 
-function DoneRecipes() {
-  const [recipeFinished, setRecipeFinished] = useState([]);
-  const [allRecipesFinished, setAllRecipesFinished] = useState([]);
+function FavoriteRecipes() {
+  const [faveRecipes, setFaveRecipes] = useState([]);
+  const [allFaveRecipes, setAllFaveRecipes] = useState([]);
+  const [attList, setAttList] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    setRecipeFinished(JSON.parse(localStorage.getItem('doneRecipes')));
-    setAllRecipesFinished(JSON.parse(localStorage.getItem('doneRecipes')));
-  }, [setRecipeFinished]);
+    setFaveRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')));
+    setAllFaveRecipes(JSON.parse(localStorage.getItem('favoriteRecipes')));
+  }, [setFaveRecipes, attList]);
 
   const filter = (fil) => {
     if (fil === 'drinks') {
-      const newList = allRecipesFinished.filter((recipe) => recipe.type === 'drink');
-      setRecipeFinished(newList);
+      const newList = allFaveRecipes.filter((recipe) => recipe.type === 'drink');
+      setFaveRecipes(newList);
     } else if (fil === 'foods') {
-      const newList = allRecipesFinished.filter((recipe) => recipe.type === 'food');
-      setRecipeFinished(newList);
+      const newList = allFaveRecipes.filter((recipe) => recipe.type === 'food');
+      setFaveRecipes(newList);
     } else {
-      setRecipeFinished(allRecipesFinished);
+      setFaveRecipes(allFaveRecipes);
     }
   };
 
   return (
     <>
-      <Header title="Done Recipes" isSearch={ false } />
-      {recipeFinished?.length > 0 && (
+      <Header title="Favorite Recipes" isSearch={ false } />
+      {faveRecipes?.length > 0 && (
         <div>
           <button
             type="button"
@@ -53,10 +54,9 @@ function DoneRecipes() {
           </button>
         </div>
       )}
-      {recipeFinished?.length > 0 && (
-        recipeFinished.map((recipe, index) => {
-          const { id, category, name, image, doneDate, tags,
-            nationality, type, alcoholicOrNot } = recipe;
+      {faveRecipes?.length > 0 && (
+        faveRecipes.map((recipe, index) => {
+          const { id, category, name, image, nationality, type, alcoholicOrNot } = recipe;
           return (
             <div key={ `${index}-${name}` }>
               <button
@@ -80,16 +80,11 @@ function DoneRecipes() {
               <p data-testid={ `${index}-horizontal-top-text` }>
                 {type === 'drink' ? alcoholicOrNot : `${nationality} - ${category}`}
               </p>
-              <p data-testid={ `${index}-horizontal-done-date` }>{doneDate}</p>
-              {tags.map((tag, inx) => (
-                <p
-                  data-testid={ `${index}-${tag}-horizontal-tag` }
-                  key={ `${name}-${inx}` }
-                >
-                  {tag}
-                </p>
-              ))}
-              <ShareButton recipe={ recipe } index={ index } />
+              <ButtonsFavorite
+                recipe={ recipe }
+                index={ index }
+                setAttList={ setAttList }
+              />
             </div>
           );
         })
@@ -98,4 +93,4 @@ function DoneRecipes() {
   );
 }
 
-export default DoneRecipes;
+export default FavoriteRecipes;
