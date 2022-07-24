@@ -1,7 +1,7 @@
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
 import userEvent from '@testing-library/user-event';
-import { act, getByTestId, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import meals from  '../../cypress/mocks/meals';
 import chickenMeals from '../../cypress/mocks/chickenMeals';
 import goatMeals from '../../cypress/mocks/goatMeals';
@@ -22,7 +22,6 @@ describe('Filtros Foods', () => {
     global.fetch = jest.fn((url) =>
     Promise.resolve({
       json: async () => {
-        console.log(url)
         if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return mealCategories;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Chicken') return chickenMeals;
         if (url === 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Beef') return beefMeals;
@@ -43,10 +42,6 @@ describe('Filtros Foods', () => {
       renderWithRouter(<App />, '/foods');
     });
   });
-//   it('botão de pesquisar aparece na tela', () => {
-//     const searchPlace = screen.getByTestId('search-top-btn');
-//     expect(searchPlace).toBeInTheDocument()
-// })
 
   it('Ao alternar categoria renderiza na tela', async () => {
     const breakfastCategoryBtn = screen.getByRole('button', {name: /breakfast/i})
@@ -95,8 +90,6 @@ describe('Filtros Foods', () => {
     const goatCategoryBtn = screen.getByRole('button', {name: /goat/i})
     userEvent.click(goatCategoryBtn);
     expect(await screen.findByText('Mbuzi Choma (Roasted Goat)')).toBeInTheDocument();
-    
-    // expect(screen.findByTestId(/-recipe-card/).length).toEqual(1)
   });
   it('Ao clicar no botão na categaria duas vezes , seleciona e desselecionar', async () => {
     const breakfastButton  = await screen.findByRole('button', { name: /Breakfast/i })

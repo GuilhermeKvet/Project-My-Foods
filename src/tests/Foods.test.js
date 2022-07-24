@@ -37,7 +37,7 @@ describe('Testando o componente Foods', () => {
 
   afterEach(() => jest.clearAllMocks());
 
-  it.only("Verifica se a página renderiza uma lista com as principais receitas", async () => {
+  it("Verifica se a página renderiza uma lista com as principais receitas", async () => {
     expect(global.fetch).toHaveBeenCalled();
     expect(await screen.findByRole('heading', { name: /corba/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Kumpir/i })).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('Testando o componente Foods', () => {
     expect(screen.getByRole('heading', { name: /Pancakes/i })).toBeInTheDocument();
   });
 
-  it.only("Filtra a lista por ingredientes *chicken de forma correta", async () => {
+  it("Filtra a lista por ingredientes *chicken de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/ingredients/i));
     userEvent.type(screen.getByRole('textbox'), 'chicken');
@@ -54,7 +54,7 @@ describe('Testando o componente Foods', () => {
     expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken');
   });
 
-  it.only("Filtra a lista por ingredientes de forma correta", async () => {
+  it("Filtra a lista por ingredientes de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/ingredients/i));
     userEvent.click(screen.getByTestId('exec-search-btn'));
@@ -63,7 +63,7 @@ describe('Testando o componente Foods', () => {
     expect(await screen.findByRole('heading', { name: /Brown Stew Chicken/i })).toBeInTheDocument();
   });
 
-  it.only("Filtra a lista por nomes de forma correta", async () => {
+  it("Filtra a lista por nomes de forma correta", async () => {
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/Name/i));
     userEvent.type(screen.getByRole('textbox'), 'soup');
@@ -78,14 +78,21 @@ describe('Testando o componente Foods', () => {
     userEvent.click(screen.getByText(/First Letter/i));
     userEvent.type(screen.getByRole('textbox'), 'a');
     userEvent.click(screen.getByTestId('exec-search-btn'));
-
-    expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=y');
   });
 
-  it.only("Alerta é mostrado na tela ao procurar refeição inválida", async () => {
+  it("Alerta é mostrado na tela ao procurar refeição inválida", () => {
+    jest.spyOn(global, 'alert').mockImplementation(() => 'Your search must have only 1 (one) character');
     userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
     userEvent.click(screen.getByText(/First Letter/i));
     userEvent.type(screen.getByRole('textbox'), 'zz');
+    userEvent.click(screen.getByTestId('exec-search-btn'));
+  });
+
+  it('Alerta é mostrado na tela ao procurar por refeição inválida', () => {
+    jest.spyOn(global, 'alert').mockImplementation(() => 'Sorry, we havent found any recipes for these filters.');
+    userEvent.click(screen.getByRole('button', { name: /search\-icon/i }));
+    userEvent.click(screen.getByText(/First Letter/i));
+    userEvent.type(screen.getByRole('textbox'), 'z');
     userEvent.click(screen.getByTestId('exec-search-btn'));
   });
 });

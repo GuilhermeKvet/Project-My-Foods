@@ -55,7 +55,7 @@ function Categories({ url, category }) {
     } else if (fetchMeals !== lastUrlFood) {
       fetchCategories(fetchMeals, 'foods');
       setLastUrlFood(fetchMeals);
-    } else if (fetchMeals === lastUrlFood) {
+    } else {
       fetchCategories(urlFoods, 'foods');
       setLastUrlFood(urlFoods);
     }

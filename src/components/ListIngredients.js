@@ -27,33 +27,22 @@ function ListIngredients({ recipe, setIsFinish }) {
   const saveProgress = (ing) => {
     setIsSaveLocal('saveLocalStorage');
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (recipesInProgress[page][id]) {
-      const isSaveIngredient = recipesInProgress[page][id].some((i) => i === ing);
-      if (isSaveIngredient) {
-        const newRecipesInProgress = {
-          ...recipesInProgress,
-          [page]: {
-            ...recipesInProgress[page],
-            [id]: recipesInProgress[page][id].filter((i) => i !== ing),
-          },
-        };
-        localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
-      } else {
-        const newRecipesInProgress = {
-          ...recipesInProgress,
-          [page]: {
-            ...recipesInProgress[page],
-            [id]: [...recipesInProgress[page][id], ing],
-          },
-        };
-        localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
-      }
+    const isSaveIngredient = recipesInProgress[page][id].some((i) => i === ing);
+    if (isSaveIngredient) {
+      const newRecipesInProgress = {
+        ...recipesInProgress,
+        [page]: {
+          ...recipesInProgress[page],
+          [id]: recipesInProgress[page][id].filter((i) => i !== ing),
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));
     } else {
       const newRecipesInProgress = {
         ...recipesInProgress,
         [page]: {
           ...recipesInProgress[page],
-          [id]: [ing],
+          [id]: [...recipesInProgress[page][id], ing],
         },
       };
       localStorage.setItem('inProgressRecipes', JSON.stringify(newRecipesInProgress));

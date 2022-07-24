@@ -31,20 +31,14 @@ function RecipesDetails() {
 
   useEffect(() => {
     const recipesInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (recipesInProgress) {
-      const idsLocalStorage = Object.keys(recipesInProgress[page]);
-      const isProgress = idsLocalStorage.some((idLocal) => idLocal === id);
-      if (isProgress) {
-        setInProgress(true);
-      }
+    if (recipesInProgress && Object.keys(recipesInProgress[page])
+      .some((idLocal) => idLocal === id)) {
+      setInProgress(true);
     }
 
     const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    if (doneRecipes) {
-      const isFinished = doneRecipes.some((recipeLocal) => recipeLocal.id === id);
-      if (isFinished) {
-        setIsFinish(true);
-      }
+    if (doneRecipes && doneRecipes.some((recipeLocal) => recipeLocal.id === id)) {
+      setIsFinish(true);
     }
   }, [isSaveLocal, id, page]);
 
@@ -143,8 +137,7 @@ function RecipesDetails() {
           data-testid={ `${index}-ingredient-name-and-measure` }
           key={ `${index}-${ingredient}` }
         >
-          {`${ingredient}  ${measures[index] === undefined
-            ? '' : `- ${measures[index]}`}`}
+          {`${ingredient}  ${measures[index] && `- ${measures[index]}`}`}
         </p>
       ))}
       <iframe

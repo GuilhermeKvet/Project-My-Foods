@@ -3,21 +3,8 @@ import renderWithRouter from './renderWithRouter';
 import userEvent from '@testing-library/user-event';
 import { act, screen, waitFor } from '@testing-library/react';
 import meals from  '../../cypress/mocks/meals';
-// import chickenMeals from '../../cypress/mocks/chickenMeals';
-// import goatMeals from '../../cypress/mocks/goatMeals';
-// import breakfastMeals from '../../cypress/mocks/breakfastMeals';
-// import beefMeals from '../../cypress/mocks/beefMeals';
-// import dessertMeals from '../../cypress/mocks/dessertMeals';
 import drinks from '../../cypress/mocks/drinks';
-// import mealsByIngredient from '../../cypress/mocks/mealsByIngredient';
-// import soupMeals from '../../cypress/mocks/soupMeals';
-// import firstLetterMeals from './mocks/firstLetterMeals';
-// import emptyMeals from '../../cypress/mocks/emptyMeals';
 import mealCategories from '../../cypress/mocks/mealCategories';
-
-
-const corbaInstrucoes = /pick through your lentils for any foreign debris, rinse them 2 or 3 times/i;
-const TIMEOUT_2000 = 2000;
 
 describe('Testa pagina de detalhes para Meals', () => {
     beforeEach(async () => {
@@ -26,9 +13,9 @@ describe('Testa pagina de detalhes para Meals', () => {
             json: () => {
               if (url === 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=52977') return Promise.resolve(meals);
               if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=corba') return Promise.resolve(meals);
-                if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return Promise.resolve(mealCategories);
-                if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return Promise.resolve(drinks)
-                if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
+              if (url === 'https://www.themealdb.com/api/json/v1/1/list.php?c=list') return Promise.resolve(mealCategories);
+              if (url === 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=') return Promise.resolve(drinks)
+              if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(meals)
             },
           })
         );
@@ -53,10 +40,6 @@ describe('Testa pagina de detalhes para Meals', () => {
     expect(screen.getByTestId('6-ingredient-name-and-measure')).toHaveTextContent(/Mint/i);
     expect(screen.getByTestId('7-ingredient-name-and-measure')).toHaveTextContent(/Thyme/i);
     expect(screen.getByTestId('8-ingredient-name-and-measure')).toHaveTextContent(/Black Pepper/i);
-
-      // expect(screen.getAllByText(corbaInstrucoes)).toBeInTheDocument()
-      
-      // expect(screen.getByText(/start recipe/i)).toBeInTheDocument();
     })
     it('Usuario consegue interagir com o video ', async () => {
       expect(screen.getByTestId('video')).toBeInTheDocument();
@@ -66,7 +49,6 @@ describe('Testa pagina de detalhes para Meals', () => {
     })
     it('As recomendações aparecem na tela',() => {
       expect(screen.getByText(/Recommendations/i)).toBeInTheDocument();
-      // expect(screen.getByText(/GG/i)).toBeInTheDocument()
       expect(screen.getByTestId('0-recomendation-title')).toBeInTheDocument()
       expect(screen.getByTestId('1-recomendation-title')).toBeInTheDocument()
       expect(screen.getByTestId('2-recomendation-title')).toBeInTheDocument()
@@ -83,11 +65,18 @@ describe('Testa pagina de detalhes para Meals', () => {
     expect(screen.getByTestId('start-recipe-btn')).toBeInTheDocument()
     userEvent.click(screen.getByTestId('start-recipe-btn'))
     await waitFor(() => 
-    expect(screen.getByTestId('0-ingredient-step')).toHaveTextContent('Lentils'))
+      expect(screen.getByTestId('0-ingredient-step')).toHaveTextContent('Lentils'))
     userEvent.click(screen.getByRole('checkbox', { name: /Lentils/i }))
     expect(screen.getByTestId('1-ingredient-step')).toHaveTextContent('Onion')
     userEvent.click(screen.getByRole('checkbox', { name: /Onion/i }))
     expect(screen.getByTestId('instructions')).toBeInTheDocument()
     expect(screen.getByTestId('finish-recipe-btn')).toBeInTheDocument()
   })
+
+  it('Botão Continue Recipe aparece quando a receita está em progresso', async () => {
+    localStorage.setItem('inProgressRecipes', '{"meals":{"52977":[]},"cocktails":{}}');
+    expect(await screen.findByRole('button', { name: /continue recipe/i })).toBeInTheDocument();
+    expect(await screen.findByText(/lentils \- 1 cup/i)).toBeInTheDocument();
+  });
+
 });

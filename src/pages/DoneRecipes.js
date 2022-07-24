@@ -13,11 +13,8 @@ function DoneRecipes() {
   const history = useHistory();
 
   useEffect(() => {
-    const finished = JSON.parse(localStorage.getItem('doneRecipes'));
-    if (finished) {
-      setRecipeFinished(finished);
-      setAllRecipesFinished(finished);
-    }
+    setRecipeFinished(JSON.parse(localStorage.getItem('doneRecipes')));
+    setAllRecipesFinished(JSON.parse(localStorage.getItem('doneRecipes')));
   }, [setRecipeFinished]);
 
   const copyLink = (recipe) => {
@@ -65,7 +62,7 @@ function DoneRecipes() {
       >
         Drinks
       </button>
-      {recipeFinished.length > 0 && (
+      {recipeFinished?.length > 0 && (
         recipeFinished.map((recipe, index) => {
           const { id, category, name, image, doneDate, tags,
             nationality, type, alcoholicOrNot } = recipe;
