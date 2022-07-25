@@ -58,7 +58,7 @@ function FavoriteRecipes() {
         faveRecipes.map((recipe, index) => {
           const { id, category, name, image, nationality, type, alcoholicOrNot } = recipe;
           return (
-            <div key={ `${index}-${name}` }>
+            <div key={ `${index}-${name}` } className="done-recipe">
               <button
                 onClick={ () => {
                   if (type === 'drink') {

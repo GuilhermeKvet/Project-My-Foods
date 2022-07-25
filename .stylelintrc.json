@@ -55,7 +55,7 @@
     ],
     "keyframe-declaration-no-important": true,
     "length-zero-no-unit": true,
-    "linebreaks": "unix",
+    "linebreaks": "windows",
     "max-empty-lines": 2,
     "max-line-length": 90,
     "max-nesting-depth": 2,

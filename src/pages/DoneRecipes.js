@@ -78,18 +78,20 @@ function DoneRecipes() {
                 />
                 <h2 data-testid={ `${index}-horizontal-name` }>{name}</h2>
               </button>
-              <p data-testid={ `${index}-horizontal-top-text` }>
-                {type === 'drink' ? alcoholicOrNot : `${nationality} - ${category}`}
-              </p>
-              <p data-testid={ `${index}-horizontal-done-date` }>{doneDate}</p>
-              {tags.map((tag, inx) => (
-                <p
-                  data-testid={ `${index}-${tag}-horizontal-tag` }
-                  key={ `${name}-${inx}` }
-                >
-                  {tag}
+              <div>
+                <p data-testid={ `${index}-horizontal-top-text` }>
+                  {type === 'drink' ? alcoholicOrNot : `${nationality} - ${category}`}
                 </p>
-              ))}
+                <p data-testid={ `${index}-horizontal-done-date` }>{doneDate}</p>
+                {tags.map((tag, inx) => (
+                  <p
+                    data-testid={ `${index}-${tag}-horizontal-tag` }
+                    key={ `${name}-${inx}` }
+                  >
+                    {tag}
+                  </p>
+                ))}
+              </div>
               <ShareButton recipe={ recipe } index={ index } />
             </div>
           );

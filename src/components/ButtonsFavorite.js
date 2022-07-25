@@ -26,14 +26,14 @@ function ButtonsFavorite({ recipe, index, setAttList }) {
   };
 
   return (
-    <>
+    <div>
       <button
         type="button"
         data-testid={ `${index}-horizontal-share-btn` }
         onClick={ () => copyLink(recipe) }
         src={ shareIcon }
       >
-        <img src={ shareIcon } alt="shareIcon" />
+        <i className="fa-solid fa-share-from-square" style={ { fontSize: '18px' } } />
       </button>
       {isShare && <span>Link copied!</span>}
       <button
@@ -42,9 +42,12 @@ function ButtonsFavorite({ recipe, index, setAttList }) {
         data-testid={ `${index}-horizontal-favorite-btn` }
         src={ blackHeartIcon }
       >
-        <img src={ blackHeartIcon } alt="heartIcon" />
+        <i
+          className="fa-solid fa-star"
+          style={ { color: 'yellow', fontSize: '20px', marginTop: '10px' } }
+        />
       </button>
-    </>
+    </div>
   );
 }
 

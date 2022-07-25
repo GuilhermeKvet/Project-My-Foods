@@ -6,7 +6,7 @@ function Footer() {
   const history = useHistory();
   const { pathname } = history.location;
   return (
-    <footer data-testid="footer">
+    <footer data-testid="footer" className="footer">
       <button
         type="button"
         onClick={ () => history.push('/drinks') }
