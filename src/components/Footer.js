@@ -1,29 +1,35 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import drinkIcon from '../images/drinkIcon.svg';
-import mealIcon from '../images/mealIcon.svg';
+import '../styles/Footer.css';
 
 function Footer() {
   const history = useHistory();
+  const { pathname } = history.location;
   return (
-    <footer
-      style={ { display: 'flex',
-        position: 'fixed',
-        width: '100%',
-        bottom: 0 } }
-      data-testid="footer"
-    >
+    <footer data-testid="footer">
       <button
         type="button"
         onClick={ () => history.push('/drinks') }
+        className="button-drinks"
+        style={
+          pathname.includes('drinks')
+            ? { backgroundColor: 'rgb(0, 110, 219)' }
+            : {}
+        }
       >
-        <img src={ drinkIcon } alt="drinkIcon" data-testid="drinks-bottom-btn" />
+        <i className="fa-solid fa-martini-glass-citrus" data-testid="drinks-bottom-btn" />
       </button>
       <button
         type="button"
         onClick={ () => history.push('/foods') }
+        className="button-foods"
+        style={
+          pathname.includes('foods')
+            ? { backgroundColor: 'rgb(0, 110, 219)' }
+            : {}
+        }
       >
-        <img src={ mealIcon } alt="mealIcon" data-testid="food-bottom-btn" />
+        <i className="fa-solid fa-burger" data-testid="food-bottom-btn" />
       </button>
     </footer>
   );

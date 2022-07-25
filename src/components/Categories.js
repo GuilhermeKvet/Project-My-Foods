@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import context from '../context/context';
+import '../styles/Categories.css';
 
 const FIVE = 5;
 const TWELVE = 12;
@@ -62,7 +63,7 @@ function Categories({ url, category }) {
   };
 
   return (
-    <>
+    <section>
       <button
         type="button"
         data-testid="All-category-filter"
@@ -88,7 +89,7 @@ function Categories({ url, category }) {
           </button>
         );
       })}
-    </>
+    </section>
   );
 }
 

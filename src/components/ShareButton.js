@@ -25,7 +25,7 @@ function ShareButton({ recipe, index }) {
         onClick={ () => copyLink(recipe) }
         src={ shareIcon }
       >
-        <img src={ shareIcon } alt="shareIcon" />
+        <i className="fa-solid fa-share-from-square" />
       </button>
       {isShare && <span>Link copied!</span>}
     </>

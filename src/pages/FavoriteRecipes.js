@@ -29,8 +29,8 @@ function FavoriteRecipes() {
   return (
     <>
       <Header title="Favorite Recipes" isSearch={ false } />
-      {faveRecipes?.length > 0 && (
-        <div>
+      {allFaveRecipes?.length > 0 && (
+        <div className="filter-buttons">
           <button
             type="button"
             data-testid="filter-by-all-btn"

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import ShareButton from '../components/ShareButton';
+import '../styles/DoneRecipes.css';
 
 function DoneRecipes() {
   const [recipeFinished, setRecipeFinished] = useState([]);
@@ -28,8 +29,8 @@ function DoneRecipes() {
   return (
     <>
       <Header title="Done Recipes" isSearch={ false } />
-      {recipeFinished?.length > 0 && (
-        <div>
+      {allRecipesFinished?.length > 0 && (
+        <div className="filter-buttons">
           <button
             type="button"
             data-testid="filter-by-all-btn"
@@ -58,7 +59,7 @@ function DoneRecipes() {
           const { id, category, name, image, doneDate, tags,
             nationality, type, alcoholicOrNot } = recipe;
           return (
-            <div key={ `${index}-${name}` }>
+            <div key={ `${index}-${name}` } className="done-recipe">
               <button
                 onClick={ () => {
                   if (type === 'drink') {

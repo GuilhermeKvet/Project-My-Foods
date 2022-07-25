@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import InteractionButtons from '../components/InteractionButtons';
 import Recommendation from '../components/Recommendation';
 import context from '../context/context';
+import '../styles/RecipeDetails.css';
 
 function RecipesDetails() {
   const { setIsSaveLocal, isSaveLocal } = useContext(context);
@@ -63,32 +64,37 @@ function RecipesDetails() {
     }, []);
 
     return (
-      <div>
+      <div className="recipe-card">
         <img
           src={ strDrinkThumb }
           alt={ strDrink }
           data-testid="recipe-photo"
-          width="200px"
+          className="recipe-card-img"
         />
-        <h2 data-testid="recipe-title">{strDrink}</h2>
-        <InteractionButtons recipe={ recipe } />
-        <p data-testid="recipe-category">{strAlcoholic}</p>
-        {ingredients.map((ingredient, index) => (
-          <p
-            data-testid={ `${index}-ingredient-name-and-measure` }
-            key={ `${index}-${ingredient}` }
-          >
-            {`${ingredient}  ${measures[index] === undefined
-              ? '' : `- ${measures[index]}`}`}
-          </p>
-        ))}
-        <p data-testid="instructions">{strInstructions}</p>
-        <Recommendation />
+        <div className="card-title">
+          <h2 data-testid="recipe-title">{strDrink}</h2>
+          <InteractionButtons recipe={ recipe } />
+        </div>
+        <div className="card-main">
+          <p data-testid="recipe-category">{strAlcoholic}</p>
+          <h3>Ingredients</h3>
+          {ingredients.map((ingredient, index) => (
+            <p
+              data-testid={ `${index}-ingredient-name-and-measure` }
+              key={ `${index}-${ingredient}` }
+            >
+              {`${ingredient}  ${measures[index] === undefined
+                ? '' : `- ${measures[index]}`}`}
+            </p>
+          ))}
+          <p data-testid="instructions">{strInstructions}</p>
+          <Recommendation />
+        </div>
         {!isFinish && (
           <button
             data-testid="start-recipe-btn"
             type="button"
-            style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
+            className="start-button"
             onClick={ () => {
               history.push(`/drinks/${id}/in-progress`);
               setIsSaveLocal('saveLocalStorageDrink');
@@ -122,42 +128,47 @@ function RecipesDetails() {
   const linkYoutube = strYoutube?.replace('watch?v=', 'embed/');
 
   return (
-    <div>
+    <div className="recipe-card">
       <img
         src={ strMealThumb }
         alt={ strMeal }
         data-testid="recipe-photo"
-        width="200px"
+        className="recipe-card-img"
       />
-      <h2 data-testid="recipe-title">{strMeal}</h2>
-      <InteractionButtons recipe={ recipe } />
-      <h3 data-testid="recipe-category">{strCategory}</h3>
-      {ingredients.map((ingredient, index) => (
-        <p
-          data-testid={ `${index}-ingredient-name-and-measure` }
-          key={ `${index}-${ingredient}` }
-        >
-          {`${ingredient}  ${measures[index] && `- ${measures[index]}`}`}
-        </p>
-      ))}
-      <iframe
-        data-testid="video"
-        width="360"
-        height="315"
-        src={ linkYoutube }
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer;
+      <div className="card-title">
+        <h2 data-testid="recipe-title">{strMeal}</h2>
+        <InteractionButtons recipe={ recipe } />
+      </div>
+      <div className="card-main">
+        <h3 data-testid="recipe-category">{strCategory}</h3>
+        <h3>Ingredients</h3>
+        {ingredients.map((ingredient, index) => (
+          <p
+            data-testid={ `${index}-ingredient-name-and-measure` }
+            key={ `${index}-${ingredient}` }
+          >
+            {`${ingredient}  ${measures[index] && `- ${measures[index]}`}`}
+          </p>
+        ))}
+        <iframe
+          data-testid="video"
+          width="300"
+          height="250"
+          src={ linkYoutube }
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer;
          autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-      <p data-testid="instructions">{strInstructions}</p>
-      <Recommendation />
+          allowFullScreen
+        />
+        <p data-testid="instructions">{strInstructions}</p>
+        <Recommendation />
+      </div>
       {!isFinish && (
         <button
           data-testid="start-recipe-btn"
-          style={ { position: 'fixed', maxWidth: '100%', bottom: 0 } }
           type="button"
+          className="start-button"
           onClick={ () => {
             history.push(`/foods/${id}/in-progress`);
             setIsSaveLocal('saveLocalStorageMeal');

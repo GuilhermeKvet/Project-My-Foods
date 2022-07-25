@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import '../styles/Profile.css';
+import profile from '../images/profile.png';
 
 function Profile() {
   const [email, setEmail] = useState('');
@@ -14,7 +16,8 @@ function Profile() {
   return (
     <>
       <Header title="Profile" isSearch={ false } />
-      <main>
+      <main className="profile">
+        <img src={ profile } alt="profile" />
         <p data-testid="profile-email">{email?.email}</p>
         <button
           type="button"

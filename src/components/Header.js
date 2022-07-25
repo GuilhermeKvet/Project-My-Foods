@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
-import profileIcon from '../images/profileIcon.svg';
+import '../styles/Header.css';
 
 function Header({ title, isSearch }) {
   const history = useHistory();
   const [searchBarState, setSearchBarState] = useState(false);
   return (
-    <header style={ { display: 'flex', flexDirection: 'column' } }>
-      <nav style={ { display: 'flex' } }>
+    <header className="header">
+      <nav>
         <button type="button" onClick={ () => history.push('/profile') }>
-          <img src={ profileIcon } alt="profile" data-testid="profile-top-btn" />
+          <i className="fa-solid fa-user" data-testid="profile-top-btn" />
         </button>
         <h1 data-testid="page-title">{title}</h1>
-        {isSearch && (
+        {isSearch ? (
           <button type="button" onClick={ () => setSearchBarState(!searchBarState) }>
-            <img
-              src={ searchIcon }
-              alt="search-icon"
-              data-testid="search-top-btn"
-            />
+            <i className="fa-solid fa-magnifying-glass" data-testid="search-top-btn" />
           </button>
+        ) : (
+          <img
+            src=""
+            alt=""
+            width="50"
+          />
         )}
       </nav>
       {searchBarState && <SearchBar />}

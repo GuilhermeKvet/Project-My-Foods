@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
+import '../styles/Login.css';
 
 const SIX = 6;
 
@@ -31,30 +32,26 @@ function Login({ history }) {
   };
 
   return (
-    <form>
-      <label htmlFor="login-id">
-        Login
-        <input
-          placeholder="Seu e-mail"
-          name="email"
-          id="login-id"
-          value={ email }
-          data-testid="email-input"
-          onChange={ (e) => setEmail(e.target.value) }
-        />
-      </label>
-      <label htmlFor="password">
-        Senha
-        <input
-          placeholder="Sua senha"
-          type="password"
-          name="password"
-          id="password"
-          value={ password }
-          data-testid="password-input"
-          onChange={ (e) => setPassword(e.target.value) }
-        />
-      </label>
+    <form className="login">
+      <h1>I FROOD</h1>
+      <img src="https://img.freepik.com/psd-gratuitas/renderizacao-3d-de-uma-deliciosa-massa_23-2149108551.jpg?t=st=1658770837~exp=1658771437~hmac=83c7240b3e5bb9b9087e76bd3efdd346d086c5998ace7598320226d9506d9cbb&w=740" alt="icon" />
+      <input
+        placeholder="Email"
+        name="email"
+        id="login-id"
+        value={ email }
+        data-testid="email-input"
+        onChange={ (e) => setEmail(e.target.value) }
+      />
+      <input
+        placeholder="Senha"
+        type="password"
+        name="password"
+        id="password"
+        value={ password }
+        data-testid="password-input"
+        onChange={ (e) => setPassword(e.target.value) }
+      />
       <button
         type="button"
         data-testid="login-submit-btn"

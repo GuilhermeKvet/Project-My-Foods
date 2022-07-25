@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const SIX = 6;
@@ -6,17 +6,6 @@ const SIX = 6;
 function Recommendation() {
   const history = useHistory();
   const [recipes, setRecipes] = useState([]);
-  const carousel = useRef(null);
-
-  const handleLeftClick = (e) => {
-    e.preventDefault();
-    carousel.current.scrollLeft -= carousel.current.offsetWidth;
-  };
-
-  const handleRightClick = (e) => {
-    e.preventDefault();
-    carousel.current.scrollLeft += carousel.current.offsetWidth;
-  };
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -42,20 +31,21 @@ function Recommendation() {
             gap: '1rem',
             overflowX: 'auto',
             scrollBehavior: 'smooth' } }
-          ref={ carousel }
         >
           {recipes.length > 0 && (
             recipes.map((recipe, index) => (
-              <div key={ recipe.idMeal } data-testid={ `${index}-recomendation-card` }>
-                <img src={ recipe.strMealThumb } alt={ recipe.strMeal } width="165" />
+              <button
+                className="recomendation-card"
+                key={ recipe.idMeal }
+                data-testid={ `${index}-recomendation-card` }
+                type="button"
+                onClick={ () => history.push(`/foods/${recipe.idMeal}`) }
+              >
+                <img src={ recipe.strMealThumb } alt={ recipe.strMeal } />
                 <p data-testid={ `${index}-recomendation-title` }>{recipe.strMeal}</p>
-              </div>
+              </button>
             ))
           )}
-        </div>
-        <div style={ { display: 'flex', justifyContent: 'center', gap: '2px' } }>
-          <button type="button" onClick={ handleLeftClick }>Left</button>
-          <button type="button" onClick={ handleRightClick }>Right</button>
         </div>
       </div>
     );
@@ -70,20 +60,21 @@ function Recommendation() {
           overflowX: 'auto',
           scrollBehavior: 'smooth',
         } }
-        ref={ carousel }
       >
         {recipes.length > 0 && (
           recipes.map((recipe, index) => (
-            <div key={ recipe.idDrink } data-testid={ `${index}-recomendation-card` }>
-              <img src={ recipe.strDrinkThumb } alt={ recipe.strDrink } width="165" />
+            <button
+              key={ recipe.idDrink }
+              className="recomendation-card"
+              data-testid={ `${index}-recomendation-card` }
+              onClick={ () => history.push(`/drinks/${recipe.idDrink}`) }
+              type="button"
+            >
+              <img src={ recipe.strDrinkThumb } alt={ recipe.strDrink } />
               <p data-testid={ `${index}-recomendation-title` }>{recipe.strDrink}</p>
-            </div>
+            </button>
           ))
         )}
-      </div>
-      <div style={ { display: 'flex', justifyContent: 'center', gap: '2px' } }>
-        <button type="button" onClick={ handleLeftClick }>Left</button>
-        <button type="button" onClick={ handleRightClick }>Right</button>
       </div>
     </div>
   );

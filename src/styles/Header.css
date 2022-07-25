@@ -1,0 +1,23 @@
+.header {
+  background-color: dodgerblue;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.493);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.header nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header nav button {
+  background: none;
+  border: none;
+}
+
+.header i {
+  color: white;
+  width: 40px;
+}

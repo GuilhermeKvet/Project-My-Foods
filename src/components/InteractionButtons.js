@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import copy from 'clipboard-copy';
 import { useHistory } from 'react-router-dom';
 import propTypes from 'prop-types';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 const THREE_MILLISECONDS = 3000;
 
@@ -81,23 +78,24 @@ function InteractionButtons({ recipe }) {
   };
 
   return (
-    <>
+    <div>
       <button
         type="button"
         data-testid="share-btn"
         onClick={ copyLink }
       >
-        <img src={ shareIcon } alt="shareIcon" />
+        <i className="fa-solid fa-share-from-square" />
       </button>
       {isShare && <span>Link copied!</span>}
       <button type="button" onClick={ saveRecipe }>
-        <img
-          src={ isFave ? blackHeartIcon : whiteHeartIcon }
-          alt="heartIcon"
+        <i
+          className="fa-solid fa-star"
           data-testid="favorite-btn"
+          style={ !isFave ? { color: 'white' }
+            : { color: 'yellow' } }
         />
       </button>
-    </>
+    </div>
   );
 }
 

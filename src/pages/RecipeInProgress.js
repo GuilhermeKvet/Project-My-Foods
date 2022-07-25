@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import InteractionButtons from '../components/InteractionButtons';
 import ListIngredients from '../components/ListIngredients';
+import '../styles/RecipeInProgress.css';
 
 function RecipeInProgress() {
   const [recipe, setRecipe] = useState({});
@@ -42,18 +43,22 @@ function RecipeInProgress() {
     };
 
     return (
-      <div>
+      <div className="recipe-card">
         <img
           src={ strDrinkThumb }
           alt={ strDrink }
           data-testid="recipe-photo"
-          width="200px"
+          className="recipe-card-img"
         />
-        <h2 data-testid="recipe-title">{strDrink}</h2>
-        <InteractionButtons recipe={ recipe } />
-        <p data-testid="recipe-category">{strAlcoholic}</p>
-        <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
-        <p data-testid="instructions">{strInstructions}</p>
+        <div className="card-title">
+          <h2 data-testid="recipe-title">{strDrink}</h2>
+          <InteractionButtons recipe={ recipe } />
+        </div>
+        <div className="card-main">
+          <p data-testid="recipe-category">{strAlcoholic}</p>
+          <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
+          <p data-testid="instructions">{strInstructions}</p>
+        </div>
         <footer
           style={ { position: 'fixed', width: '100%', bottom: 0 } }
         >
@@ -61,6 +66,7 @@ function RecipeInProgress() {
             type="button"
             data-testid="finish-recipe-btn"
             disabled={ isFinish }
+            className="finish-button"
             onClick={ () => {
               history.push('/done-recipes');
               const finished = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -95,18 +101,22 @@ function RecipeInProgress() {
   };
 
   return (
-    <div>
+    <div className="recipe-card">
       <img
         src={ strMealThumb }
         alt={ strMeal }
         data-testid="recipe-photo"
-        width="200px"
+        className="recipe-card-img"
       />
-      <h2 data-testid="recipe-title">{strMeal}</h2>
-      <InteractionButtons recipe={ recipe } />
-      <h3 data-testid="recipe-category">{strCategory}</h3>
-      <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
-      <p data-testid="instructions">{strInstructions}</p>
+      <div className="card-title">
+        <h2 data-testid="recipe-title">{strMeal}</h2>
+        <InteractionButtons recipe={ recipe } />
+      </div>
+      <div className="card-main">
+        <h3 data-testid="recipe-category">{strCategory}</h3>
+        <ListIngredients recipe={ recipe } setIsFinish={ setIsFinish } />
+        <p data-testid="instructions">{strInstructions}</p>
+      </div>
       <footer
         style={ { position: 'fixed', width: '100%', bottom: 0 } }
       >
@@ -114,6 +124,7 @@ function RecipeInProgress() {
           type="button"
           data-testid="finish-recipe-btn"
           disabled={ isFinish }
+          className="finish-button"
           onClick={ () => {
             history.push('/done-recipes');
             const finished = JSON.parse(localStorage.getItem('doneRecipes'));
