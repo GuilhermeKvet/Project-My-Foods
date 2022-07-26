@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import GoBackButton from '../components/GoBackButton';
 import InteractionButtons from '../components/InteractionButtons';
 import ListIngredients from '../components/ListIngredients';
 import '../styles/RecipeInProgress.css';
@@ -44,6 +45,7 @@ function RecipeInProgress() {
 
     return (
       <div className="recipe-card">
+        <GoBackButton />
         <img
           src={ strDrinkThumb }
           alt={ strDrink }
@@ -102,6 +104,7 @@ function RecipeInProgress() {
 
   return (
     <div className="recipe-card">
+      <GoBackButton />
       <img
         src={ strMealThumb }
         alt={ strMeal }

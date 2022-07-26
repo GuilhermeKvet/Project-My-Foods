@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import GoBackButton from '../components/GoBackButton';
 import InteractionButtons from '../components/InteractionButtons';
 import Recommendation from '../components/Recommendation';
 import context from '../context/context';
@@ -65,6 +66,7 @@ function RecipesDetails() {
 
     return (
       <div className="recipe-card">
+        <GoBackButton />
         <img
           src={ strDrinkThumb }
           alt={ strDrink }
@@ -129,6 +131,7 @@ function RecipesDetails() {
 
   return (
     <div className="recipe-card">
+      <GoBackButton />
       <img
         src={ strMealThumb }
         alt={ strMeal }
